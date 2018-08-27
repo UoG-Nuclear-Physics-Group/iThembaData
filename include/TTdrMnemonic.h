@@ -1,0 +1,49 @@
+#ifndef TTDRMNEMONIC_H
+#define TTDRMNEMONIC_H
+
+#include <string>
+#include "TMnemonic.h"
+#include "Globals.h"
+#include "TClass.h"
+
+class TTdrMnemonic : public TMnemonic {
+public:
+   TTdrMnemonic() : TMnemonic() { Clear(); }
+   TTdrMnemonic(const char* name) : TTdrMnemonic() { TMnemonic::Parse(name); }
+   ~TTdrMnemonic() override = default;
+
+   // standard C++ makes these enumerations global to the class. ie, the name of the enumeration
+   // EMnemonic or ESystem has no effect on the clashing of enumerated variable names.
+   // These separations exist only to easily see the difference when looking at the code here.
+   enum class ESystem {
+		kTdrClover,         //0
+		kTdrCloverBgo,
+		kTdrTigress,
+		kTdrTigressBgo,
+		kTdrSiLi,
+		kTdrPlastic,
+		kClear              //6
+	};
+	enum class EDigitizer { kDefault, kCaen, kPixie, kFastPixie, kPixieTapeMove };
+
+	ESystem   System() const { return fSystem; }
+
+	void Parse(std::string* name) override;
+
+	static EDigitizer EnumerateDigitizer(std::string name);
+
+	TClass* GetClassType() const override;
+	void Print(Option_t* opt = "") const override;
+	void Clear(Option_t* opt = "") override;
+
+private:
+	ESystem fSystem;
+
+	void EnumerateSystem();
+
+	/// \cond CLASSIMP
+	ClassDefOverride(TTdrMnemonic, 1)
+	/// \endcond
+};
+
+#endif
