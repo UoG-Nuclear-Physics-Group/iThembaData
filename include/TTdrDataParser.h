@@ -79,9 +79,9 @@ public:
 	int Process(std::shared_ptr<TRawEvent>) override;
 #endif
 
-public:
-	int TdrToFragment(std::vector<char> data);
 private:
+	int TdrToFragment(char* data, uint32_t size);
+
 	EDataParserState fState;
 };
 /*! @} */
