@@ -24,18 +24,28 @@ TTdrDataParser::~TTdrDataParser()
 {
 }
 
-int TTdrDataParser::TdrToFragment(std::vector<char> data)
+int TTdrDataParser::Process(std::shared_ptr<TRawEvent> rawEvent)
 {
-	uint64_t* ptr = reinterpret_cast<uint64_t*>(data.data());
+   /// Process this TTdrEvent using the provided data parser.
+   /// Returns the total number of fragments read (good and bad).
+   // right now the parser only returns the total number of fragments read
+   // so we assume (for now) that all fragments are good fragments
+	std::shared_ptr<TTdrEvent> event = std::static_pointer_cast<TTdrEvent>(rawEvent);
+   return TdrToFragment(event->GetData(), event->GetDataSize());
+}
+
+int TTdrDataParser::TdrToFragment(char* data, uint32_t size)
+{
+	uint64_t* ptr = reinterpret_cast<uint64_t*>(data);
 
 	int totalEventsRead = 0;
 	static uint64_t timeStampHighBits = 0;
    std::shared_ptr<TFragment> eventFrag       = std::make_shared<TFragment>();
    if(fItemsPopped != nullptr && fInputSize != nullptr) {
-      *fInputSize   += data.size()/8; // words of 8 bytes each
+      *fInputSize   += size/8; // words of 8 bytes each
    }
 
-	for(size_t i = 0; i < data.size()/8; ++i) {
+	for(size_t i = 0; i < size/8; ++i) {
 		eventFrag->Clear();
 		if(fItemsPopped != nullptr && fInputSize != nullptr) {
 			++(*fItemsPopped);
@@ -125,11 +135,11 @@ int TTdrDataParser::TdrToFragment(std::vector<char> data)
 					//std::cout<<std::dec<<std::setfill(' ');
 					// we expect a second word from the channel+16 with the same timestamp
 					++i;
-					if(i >= data.size()/8) {
+					if(i >= size/8) {
 						if(fRecordDiag) {
 							TParsingDiagnostics::Get()->BadFragment(66);
 						}
-						Push(*fBadOutputQueue, std::make_shared<TBadFragment>(*eventFrag, reinterpret_cast<uint32_t*>(data.data()), data.size()/4, i, false));
+						Push(*fBadOutputQueue, std::make_shared<TBadFragment>(*eventFrag, reinterpret_cast<uint32_t*>(data), size/4, i, false));
 						continue;
 					}
 					// check address
@@ -138,7 +148,7 @@ int TTdrDataParser::TdrToFragment(std::vector<char> data)
 						if(fRecordDiag) {
 							TParsingDiagnostics::Get()->BadFragment(67);
 						}
-						Push(*fBadOutputQueue, std::make_shared<TBadFragment>(*eventFrag, reinterpret_cast<uint32_t*>(data.data()), data.size()/4, i, false));
+						Push(*fBadOutputQueue, std::make_shared<TBadFragment>(*eventFrag, reinterpret_cast<uint32_t*>(data), size/4, i, false));
 						// re-try this word
 						--i;
 						continue;
@@ -149,7 +159,7 @@ int TTdrDataParser::TdrToFragment(std::vector<char> data)
 						if(fRecordDiag) {
 							TParsingDiagnostics::Get()->BadFragment(68);
 						}
-						Push(*fBadOutputQueue, std::make_shared<TBadFragment>(*eventFrag, reinterpret_cast<uint32_t*>(data.data()), data.size()/4, i, false));
+						Push(*fBadOutputQueue, std::make_shared<TBadFragment>(*eventFrag, reinterpret_cast<uint32_t*>(data), size/4, i, false));
 						// re-try this word
 						--i;
 						continue;

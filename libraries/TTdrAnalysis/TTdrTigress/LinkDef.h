@@ -1,4 +1,4 @@
-//TTdrTigress.h TTdrTigressHit.h 
+//TTdrTigress.h TTdrTigressHit.h TTdrTigressBgo.h
 #ifdef __CINT__
 
 #pragma link off all globals;
@@ -12,6 +12,7 @@
 #pragma link C++ class std::vector<TTdrTigressHit>+;
 #pragma link C++ class std::vector<TTdrTigressHit*>+;
 #pragma link C++ class TTdrTigress+;
+#pragma link C++ class TTdrTigressBgo+;
 
 #endif
 
