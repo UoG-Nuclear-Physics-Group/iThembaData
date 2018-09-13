@@ -18,7 +18,9 @@
 #include "TTdrFile.h"
 #include "TTdrEvent.h"
 #include "TRunInfo.h"
-#include "GVersion.h"
+#include "TTdrDetectorInformation.h"
+#include "TTdrMnemonic.h"
+#include "iThembaDataVersion.h"
 
 /// \cond CLASSIMP
 ClassImp(TTdrFile)
@@ -80,9 +82,12 @@ bool TTdrFile::Open(const char* filename)
 #define O_LARGEFILE 0
 #endif
 
+	// setup TChannel to use our mnemonics
+	TChannel::SetMnemonicClass(TTdrMnemonic::Class());
+
    TRunInfo::SetRunInfo(GetRunNumber(), GetSubRunNumber());
 	TRunInfo::ClearVersion();
-   TRunInfo::SetVersion(GRSI_RELEASE);
+   TRunInfo::SetVersion(ITHEMBADATA_RELEASE);
 
    std::cout<<"Successfully opened file with "<<fFileSize<<" bytes!"<<std::endl;
 
@@ -92,6 +97,9 @@ bool TTdrFile::Open(const char* filename)
 	//	if(i%16 == 15) std::cout<<std::endl;
 	//}
 	//std::cout<<std::dec<<std::setfill(' ');
+
+	TTdrDetectorInformation* detInfo = new TTdrDetectorInformation();
+	TRunInfo::SetDetectorInformation(detInfo);
 
    return true;
 }
