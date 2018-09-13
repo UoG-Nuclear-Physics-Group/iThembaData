@@ -18,6 +18,7 @@
 #include "TTdrFile.h"
 #include "TTdrEvent.h"
 #include "TRunInfo.h"
+#include "TTdrDetectorInformation.h"
 #include "GVersion.h"
 
 /// \cond CLASSIMP
@@ -92,6 +93,9 @@ bool TTdrFile::Open(const char* filename)
 	//	if(i%16 == 15) std::cout<<std::endl;
 	//}
 	//std::cout<<std::dec<<std::setfill(' ');
+
+	TTdrDetectorInformation* detInfo = new TTdrDetectorInformation();
+	TRunInfo::SetDetectorInformation(detInfo);
 
    return true;
 }
