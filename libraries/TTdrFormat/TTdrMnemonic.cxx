@@ -43,19 +43,21 @@ void TTdrMnemonic::EnumerateSystem()
 	}
 }
 
-TTdrMnemonic::EDigitizer TTdrMnemonic::EnumerateDigitizer(std::string name)
+void TTdrMnemonic::EnumerateDigitizer(TPriorityValue<std::string>& digitizerName, TPriorityValue<EDigitizer>& digitizerType)
 {
+	std::string name = digitizerName.Value();
 	std::transform(name.begin(), name.end(), name.begin(), ::toupper);
+	EDigitizer tmpType = EDigitizer::kDefault;
 	if(name.compare("PIXIE") == 0) {
-		return EDigitizer::kPixie;
+		tmpType = EDigitizer::kPixie;
+	} else if(name.compare("FASTPIXIE") == 0) {
+		tmpType = EDigitizer::kFastPixie;
+	} else if(name.compare("PIXIETAPEMOVE") == 0) {
+		tmpType = EDigitizer::kPixieTapeMove;
+	} else {
+		std::cout<<"Warning, digitizer type '"<<name<<"' not recognized, options are 'GRF16', 'GRF4G', 'TIG10', 'TIG64', and 'CAEN'!"<<std::endl;
 	}
-	if(name.compare("FASTPIXIE") == 0) {
-		return EDigitizer::kFastPixie;
-	}
-	if(name.compare("PIXIETAPEMOVE") == 0) {
-		return EDigitizer::kPixieTapeMove;
-	}
-	return EDigitizer::kDefault;
+	digitizerType.Set(tmpType, digitizerName.Priority());
 }
 
 void TTdrMnemonic::Parse(std::string* name)

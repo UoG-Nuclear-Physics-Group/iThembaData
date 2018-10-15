@@ -100,7 +100,7 @@ int TTdrDataParser::TdrToFragment(char* data, uint32_t size)
 					// data word with channelNumber, adcData, and 28 low bits of timestamp
 					// check if this is the tape-move event
 					auto channel = TChannel::GetChannel((ptr[i]>>48)&0xfff);
-					if(channel != nullptr && static_cast<TTdrMnemonic::EDigitizer>(channel->GetDigitizerType()) == TTdrMnemonic::EDigitizer::kPixieTapeMove) {
+					if(channel != nullptr && static_cast<EDigitizer>(channel->GetDigitizerType()) == EDigitizer::kPixieTapeMove) {
 						//PPG
 						auto* ppgEvent = new TPPGData;
 						switch(channel->GetDetectorNumber()) {
