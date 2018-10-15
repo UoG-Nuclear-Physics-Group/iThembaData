@@ -6,6 +6,8 @@
 #include "Globals.h"
 #include "TClass.h"
 
+enum class EDigitizer :char { kDefault, kCaen, kPixie, kFastPixie, kPixieTapeMove };
+
 class TTdrMnemonic : public TMnemonic {
 public:
    TTdrMnemonic() : TMnemonic() { Clear(); }
@@ -24,13 +26,12 @@ public:
 		kTdrPlastic,
 		kClear              //6
 	};
-	enum class EDigitizer { kDefault, kCaen, kPixie, kFastPixie, kPixieTapeMove };
 
 	ESystem   System() const { return fSystem; }
 
 	void Parse(std::string* name) override;
 
-	static EDigitizer EnumerateDigitizer(std::string name);
+	void EnumerateDigitizer(TPriorityValue<std::string>& digitizerName, TPriorityValue<EDigitizer>& digitizerType) override;
 
 	TClass* GetClassType() const override;
 	void Print(Option_t* opt = "") const override;
