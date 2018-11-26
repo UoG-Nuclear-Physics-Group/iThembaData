@@ -151,6 +151,20 @@ int TTdrFile::Read(std::shared_ptr<TRawEvent> tdrEvent)
    return 0;
 }
 
+void TTdrFile::Skip(size_t nofEvents)
+{
+	if(!fInputFile.is_open()) {
+		std::cerr<<__PRETTY_FUNCTION__<<": input file is not open!"<<std::endl;
+		return;
+	}
+	// try to skip next nofEvents 64k buffer
+	fInputFile.seekg(nofEvents * 0x10000, std::ifstream::cur);
+	if(!fInputFile.good()) {
+		std::cout<<"Failed to skip next "<<nofEvents<<" 64k buffer(s), currently at "<<fBytesRead<<"/"<<fFileSize<<std::endl;
+      fInputFile.close();
+	}
+}
+
 int TTdrFile::GetRunNumber()
 {
    // Parse the run number from the current TMidasFile. This assumes a format of
