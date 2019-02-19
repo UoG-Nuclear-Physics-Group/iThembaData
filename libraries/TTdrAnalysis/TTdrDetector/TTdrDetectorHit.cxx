@@ -46,19 +46,19 @@ Double_t TTdrDetectorHit::GetTime(const ETimeFlag&, Option_t*) const
    TChannel* channel = GetChannel();
    if(channel == nullptr) {
       Error("GetTime", "No TChannel exists for address 0x%08x", GetAddress());
-      return SetTime(10. * (static_cast<Double_t>((GetTimeStamp()) + gRandom->Uniform())));
+      return SetTime(GetTimeStampUnit() * (static_cast<Double_t>((GetTimeStamp()) + gRandom->Uniform())));
    }
    switch(static_cast<EDigitizer>(channel->GetDigitizerType())) {
 		Double_t dTime;
 		case EDigitizer::kPixie:
-		dTime = GetTimeStamp() * 10. + channel->CalibrateCFD(fCfd/3276.8);// CFD is reported as 15bit interpolation of 10 ns
-		return SetTime(dTime - 10. * (channel->GetTZero(GetEnergy())));
+		dTime = GetTimeStamp() * GetTimeStampUnit() + channel->CalibrateCFD(fCfd/3276.8);// CFD is reported as 15bit interpolation of 10 ns
+		return SetTime(dTime - channel->GetTZero(GetEnergy()));
 		case EDigitizer::kFastPixie:
-		dTime = GetTimeStamp() * 10. + channel->CalibrateCFD(fCfd/6553.6);// CFD is reported as 16bit interpolation of 10 ns
-		return SetTime(dTime - 10. * (channel->GetTZero(GetEnergy())));
+		dTime = GetTimeStamp() * GetTimeStampUnit() + channel->CalibrateCFD(fCfd/6553.6);// CFD is reported as 16bit interpolation of 10 ns
+		return SetTime(dTime - channel->GetTZero(GetEnergy()));
 		default:
-		dTime = static_cast<Double_t>((GetTimeStamp()) + gRandom->Uniform());
-		return SetTime(10. * (dTime - channel->GetTZero(GetEnergy())));
+		dTime = static_cast<Double_t>((GetTimeStamp() * GetTimeStampUnit()) + gRandom->Uniform());
+		return SetTime(dTime - channel->GetTZero(GetEnergy()));
 	}
    return 0.;
 }
