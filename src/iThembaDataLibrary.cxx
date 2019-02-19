@@ -1,5 +1,7 @@
 #include <string>
 
+#include "TClassRef.h"
+
 #include "TTdrFile.h"
 #include "TTdrDataParser.h"
 #include "iThembaDataVersion.h"
@@ -14,4 +16,4 @@ extern "C" void DestroyParser(TTdrDataParser* obj) { delete obj; }
 
 extern "C" std::string LibraryVersion() { return std::string(ITHEMBADATA_RELEASE); }
 
-extern "C" void InitLibrary() { TChannel::SetMnemonicClass(TTdrMnemonic::Class()); }
+extern "C" void InitLibrary() { TChannel::SetMnemonicClass(TClassRef("TTdrMnemonic")); }
