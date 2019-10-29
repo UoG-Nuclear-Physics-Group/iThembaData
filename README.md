@@ -13,3 +13,5 @@ Other classes included are:
  - the TTdrMnemonic class that provides an enumeration for the detector systems,
  - the TTdrDetectorInformation which sets the build mode to be timestamp based, and the functions determining which detectors are present in the data, and
  - the TTdrDetectorHit which overrides the GetTime function of the TDetectorHit with the approriate algorithm.
+
+To compile simply call ```make``` from inside the iThembaData directory.
