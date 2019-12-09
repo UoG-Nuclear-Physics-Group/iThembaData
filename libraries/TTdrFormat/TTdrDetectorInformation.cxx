@@ -54,8 +54,7 @@ void TTdrDetectorInformation::Clear(Option_t*)
 void TTdrDetectorInformation::Set()
 {
 	/// Sets the run info. This figures out what systems are available.
-	std::map<unsigned int, TChannel*>::iterator iter;
-	for(iter = TChannel::GetChannelMap()->begin(); iter != TChannel::GetChannelMap()->end(); iter++) {
+	for(auto iter = TChannel::GetChannelMap()->begin(); iter != TChannel::GetChannelMap()->end(); iter++) {
 		std::string channelname = iter->second->GetName();
 
 		//  detector system type.
