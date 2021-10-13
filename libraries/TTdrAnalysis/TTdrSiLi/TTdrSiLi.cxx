@@ -67,7 +67,7 @@ TTdrSiLi& TTdrSiLi::operator=(const TTdrSiLi& rhs)
 void TTdrSiLi::AddFragment(const std::shared_ptr<const TFragment>& frag, TChannel*)
 {
 	auto hit = new TTdrSiLiHit(*frag);
-	fHits.push_back(std::move(hit));
+	fHits.push_back(hit);
 }
 
 TVector3 TTdrSiLi::GetPosition(int)

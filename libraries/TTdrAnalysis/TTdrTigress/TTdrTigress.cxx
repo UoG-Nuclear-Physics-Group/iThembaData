@@ -363,8 +363,8 @@ void TTdrTigress::AddFragment(const std::shared_ptr<const TFragment>& frag, TCha
 		return;
 	}
 
-	auto geHit = new TTdrTigressHit(*frag);
-	fHits.push_back(std::move(geHit));
+	auto hit = new TTdrTigressHit(*frag);
+	fHits.push_back(hit);
 }
 
 TVector3 TTdrTigress::GetPosition(int DetNbr, int CryNbr, double dist)
