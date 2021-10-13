@@ -73,8 +73,8 @@ TTdrPlastic& TTdrPlastic::operator=(const TTdrPlastic& rhs)
 
 void TTdrPlastic::AddFragment(const std::shared_ptr<const TFragment>& frag, TChannel*)
 {
-	auto scHit = new TTdrPlasticHit(*frag);                 // Construction of TTdrPlasticHit is handled in the constructor
-	fHits.push_back(std::move(scHit)); // Can't use scHit outside of vector after using std::move
+	auto hit = new TTdrPlasticHit(*frag);                 // Construction of TTdrPlasticHit is handled in the constructor
+	fHits.push_back(hit);
 }
 
 void TTdrPlastic::Print(Option_t*) const

@@ -363,8 +363,8 @@ void TTdrClover::AddFragment(const std::shared_ptr<const TFragment>& frag, TChan
 		return;
 	}
 
-	auto geHit = new TTdrCloverHit(*frag);
-	fHits.push_back(std::move(geHit));
+	auto hit = new TTdrCloverHit(*frag);
+	fHits.push_back(hit);
 }
 
 TVector3 TTdrClover::GetPosition(int DetNbr, int CryNbr, double dist)
