@@ -23,7 +23,7 @@ TTdrPlasticHit::TTdrPlasticHit()
 
 TTdrPlasticHit::~TTdrPlasticHit() = default;
 
-TTdrPlasticHit::TTdrPlasticHit(const TTdrPlasticHit& rhs) : TTdrDetectorHit()
+TTdrPlasticHit::TTdrPlasticHit(const TTdrPlasticHit& rhs) : TDetectorHit()
 {
 	// Copy Constructor
 #if MAJOR_ROOT_VERSION < 6
@@ -33,7 +33,7 @@ TTdrPlasticHit::TTdrPlasticHit(const TTdrPlasticHit& rhs) : TTdrDetectorHit()
 	rhs.Copy(*this);
 }
 
-TTdrPlasticHit::TTdrPlasticHit(const TFragment& frag) : TTdrDetectorHit(frag)
+TTdrPlasticHit::TTdrPlasticHit(const TFragment& frag) : TDetectorHit(frag)
 {
 	if(TTdrPlastic::SetWave()) {
 		if(frag.GetWaveform()->empty()) {
@@ -75,7 +75,7 @@ TTdrPlasticHit::TTdrPlasticHit(const TFragment& frag) : TTdrDetectorHit(frag)
 void TTdrPlasticHit::Copy(TObject& rhs) const
 {
 	// Copies a TTdrPlasticHit
-	TTdrDetectorHit::Copy(rhs);
+	TDetectorHit::Copy(rhs);
 	static_cast<TTdrPlasticHit&>(rhs).fFilter = fFilter;
 }
 
@@ -110,7 +110,7 @@ void TTdrPlasticHit::Clear(Option_t*)
 {
 	// Clears the TdrPlasticHit
 	fFilter = 0;
-	TTdrDetectorHit::Clear();
+	TDetectorHit::Clear();
 }
 
 void TTdrPlasticHit::Print(Option_t*) const

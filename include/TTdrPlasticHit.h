@@ -23,9 +23,9 @@
 
 #include "TVector3.h"
 
-#include "TTdrDetectorHit.h"
+#include "TDetectorHit.h"
 
-class TTdrPlasticHit : public TTdrDetectorHit {
+class TTdrPlasticHit : public TDetectorHit {
 public:
    TTdrPlasticHit();
    ~TTdrPlasticHit() override;

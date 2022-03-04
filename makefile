@@ -7,10 +7,10 @@ PLATFORM:=$(shell uname)
 # EDIT THIS SECTION
 
 INCLUDES   = include 
-CFLAGS     = -g -std=c++11 -O3 -Wall -Wextra -pedantic -Wno-unknown-pragmas -Wno-unused-function -Wshadow
+CFLAGS     = -g -O3 -Wall -Wextra -pedantic -Wno-unknown-pragmas -Wno-unused-function -Wshadow
 #-Wall -Wextra -pedantic -Wno-unused-parameter
 LINKFLAGS_PREFIX  =
-LINKFLAGS_SUFFIX  = -L/opt/X11/lib -lX11 -lXpm -std=c++11
+LINKFLAGS_SUFFIX  = -L/opt/X11/lib -lX11 -lXpm
 SRC_SUFFIX = cxx
 
 # EVERYTHING PAST HERE SHOULD WORK AUTOMATICALLY
@@ -22,6 +22,16 @@ ROOT_PYTHON_VERSION=$(shell root-config --python-version)
 MATHMORE_INSTALLED:=$(shell root-config --has-mathmore)
 XML_INSTALLED:=$(shell root-config --has-xml)
 
+# Functions for determining the files included in a library.
+# All src files in the library directory are included.
+# If a LinkDef.h file is present in the library directory,
+#    a dictionary file will also be generated and added to the library.
+libdir          = $(shell $(FIND) libraries -name $(1) -type d)
+lib_src_files   = $(shell $(FIND) $(call libdir,$(1)) -name "*.$(SRC_SUFFIX)")
+lib_o_files     = $(patsubst %.$(SRC_SUFFIX),.build/%.o,$(call lib_src_files,$(1)))
+lib_linkdef     = $(wildcard $(call libdir,$(1))/LinkDef.h)
+lib_dictionary  = $(patsubst %/LinkDef.h,.build/%/LibDictionary.o,$(call lib_linkdef,$(1)))
+	
 CFLAGS += -DMAJOR_ROOT_VERSION=${MAJOR_ROOT_VERSION}
 ifeq ($(ROOT_PYTHON_VERSION),2.7)
   CFLAGS += -DHAS_CORRECT_PYTHON_VERSION
@@ -78,9 +88,9 @@ INCLUDES  := $(addprefix -I$(CURDIR)/,$(INCLUDES)) -I$(shell grsi-config --incdi
 CFLAGS    += $(shell grsi-config --cflags)
 CFLAGS    += $(shell root-config --cflags)
 CFLAGS    += -MMD -MP $(INCLUDES)
-LINKFLAGS += -Llib $(addprefix -l,$(LIBRARY_NAMES)) -Wl,-rpath,\$$ORIGIN/../lib
-LINKFLAGS += $(shell root-config --glibs) -lSpectrum -lPyROOT -lMinuit -lGuiHtml -lTreePlayer -lX11 -lXpm -lProof -lTMVA
+LINKFLAGS += $(shell root-config --glibs) -lSpectrum -lMinuit -lGuiHtml -lTreePlayer -lX11 -lXpm -lProof -lTMVA
 LINKFLAGS += $(shell grsi-config --all-libs)
+LINKFLAGS += $(shell grsi-config --ILLData-libs)
 
 # RCFLAGS are being used for rootcint
 ifeq ($(MATHMORE_INSTALLED),yes)
@@ -101,13 +111,9 @@ ROOT_LIBFLAGS := $(shell root-config --cflags --glibs)
 GRSI_LIBFLAGS := $(shell grsi-config --cflags --libs)
 
 UTIL_O_FILES    := $(patsubst %.$(SRC_SUFFIX),.build/%.o,$(wildcard util/*.$(SRC_SUFFIX)))
-#SANDBOX_O_FILES := $(patsubst %.$(SRC_SUFFIX),.build/%.o,$(wildcard Sandbox/*.$(SRC_SUFFIX)))
-SCRIPT_O_FILES    := $(patsubst %.$(SRC_SUFFIX),.build/%.o,$(wildcard scripts/*.$(SRC_SUFFIX)))
-PROOF_O_FILES    := $(patsubst %.$(SRC_SUFFIX),.build/%.o,$(wildcard GRSIProof/*.$(SRC_SUFFIX)))
-ANALYSIS_O_FILES := $(patsubst %.$(SRC_SUFFIX),.build/%.o,$(wildcard myAnalysis/*.$(SRC_SUFFIX)))
 MAIN_O_FILES    := $(patsubst %.$(SRC_SUFFIX),.build/%.o,$(wildcard src/*.$(SRC_SUFFIX)))
-EXE_O_FILES     := $(UTIL_O_FILES) $(SANDBOX_O_FILES) $(SCRIPT_O_FILES) $(ANALYSIS_O_FILES) $(PROOF_O_FILES)
-EXECUTABLES     := $(patsubst %.o,bin/%,$(notdir $(EXE_O_FILES))) bin/grsisort
+EXE_O_FILES     := $(UTIL_O_FILES)
+EXECUTABLES     := $(patsubst %.o,$(GRSISYS)/bin/%,$(notdir $(EXE_O_FILES)))
 
 HISTOGRAM_SO    := $(patsubst histos/%.$(SRC_SUFFIX),lib/lib%.so,$(wildcard histos/*.$(SRC_SUFFIX)))
 FILTER_SO    := $(patsubst filters/%.$(SRC_SUFFIX),lib/lib%.so,$(wildcard filters/*.$(SRC_SUFFIX)))
@@ -131,14 +137,19 @@ run_and_test =@printf "%b%b%b" " $(3)$(4)$(5)" $(notdir $(2)) "$(NO_COLOR)\r";  
                 rm -f $(2).log $(2).error
 endif
 
-all: include/iThembaDataVersion.h $(LIBRARY_OUTPUT) lib/libiThembaData.so
+all: include/iThembaDataVersion.h $(LIBRARY_OUTPUT) lib/libiThembaData.so $(EXECUTABLES)
 	@$(FIND) .build -name "*.pcm" -exec cp {} lib/ \;
+	@$(FIND) .build -name "*.rootmap" -exec cp {} lib/ \;
 	@printf "$(OK_COLOR)Compilation successful, $(WARN_COLOR)woohoo!$(NO_COLOR)\n"
+	@grep "^GRSI.ParserLibrary" ../.grsirc 2>&1 > /dev/null || printf "$(ERROR_COLOR)You need to set GRSI.ParserLibrary in your .grsirc to enable the use of this library!$(NO_COLOR)\n"
 
 docs: doxygen
 
 doxygen:
 	$(MAKE) -C $@
+
+$(GRSISYS)/bin/%: .build/util/%.o | $(LIBRARY_OUTPUT) include/iThembaDataVersion.h lib/libiThembaData.so
+	$(call run_and_test,$(CPP) $< -o $@ $(LINKFLAGS),$@,$(COM_COLOR),$(COM_STRING),$(OBJ_COLOR) )
 
 lib: include/iThembaDataVersion.h
 	@mkdir -p $@
@@ -146,15 +157,8 @@ lib: include/iThembaDataVersion.h
 include/iThembaDataVersion.h:
 	$(call run_and_test,util/gen_version.sh,$@,$(COM_COLOR),$(COM_STRING),$(OBJ_COLOR) )
 
-# Functions for determining the files included in a library.
-# All src files in the library directory are included.
-# If a LinkDef.h file is present in the library directory,
-#    a dictionary file will also be generated and added to the library.
-libdir          = $(shell $(FIND) libraries -name $(1) -type d)
-lib_src_files   = $(shell $(FIND) $(call libdir,$(1)) -name "*.$(SRC_SUFFIX)")
-lib_o_files     = $(patsubst %.$(SRC_SUFFIX),.build/%.o,$(call lib_src_files,$(1)))
-lib_linkdef     = $(wildcard $(call libdir,$(1))/LinkDef.h)
-lib_dictionary  = $(patsubst %/LinkDef.h,.build/%/LibDictionary.o,$(call lib_linkdef,$(1)))
+lib/lib%.so: $(LIBRARY_OUTPUT) .build/histos/%.o | include/iThembaDataVersion.h lib
+	$(call run_and_test,$(CPP) -fPIC $^ $(SHAREDSWITCH)lib$*.so $(ROOT_LIBFLAGS) -Llib $(addprefix -l,$(LIBRARY_NAMES)) -o $@,$@,$(BLD_COLOR),$(BLD_STRING),$(OBJ_COLOR) )
 
 lib/lib%.so: $$(call lib_o_files,%) $$(call lib_dictionary,%) | include/iThembaDataVersion.h lib
 	$(call run_and_test,$(CPP) -fPIC $^ $(SHAREDSWITCH)lib$*.so $(ROOT_LIBFLAGS) $(GRSI_LIBFLAGS) -o $@,$@,$(BLD_COLOR),$(BLD_STRING),$(OBJ_COLOR) )
@@ -195,6 +199,7 @@ html: all
 clean:
 	@printf "\n$(WARN_COLOR)Cleaning up$(NO_COLOR)\n\n"
 	@-$(RM) -rf .build lib
+	@-$(RM) -f $(EXECUTABLES)
 	@-$(RM) -rf libraries/*.so libraries/*.pcm #this is here for cleaning up libraries from pre GRSI 3.0
 
 cleaner: clean

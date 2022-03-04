@@ -10,7 +10,7 @@ ClassImp(TTdrCloverHit)
 /// \endcond
 
 TTdrCloverHit::TTdrCloverHit()
-   : TTdrDetectorHit()
+   : TDetectorHit()
 {
 // Default Ctor. Ignores TObject Streamer in ROOT < 6.
 #if MAJOR_ROOT_VERSION < 6
@@ -19,14 +19,14 @@ TTdrCloverHit::TTdrCloverHit()
    Clear();
 }
 
-TTdrCloverHit::TTdrCloverHit(const TTdrCloverHit& rhs) : TTdrDetectorHit()
+TTdrCloverHit::TTdrCloverHit(const TTdrCloverHit& rhs) : TDetectorHit()
 {
    // Copy Ctor. Ignores TObject Streamer in ROOT < 6.
    Clear();
    rhs.Copy(*this);
 }
 
-TTdrCloverHit::TTdrCloverHit(const TFragment& frag) : TTdrDetectorHit(frag)
+TTdrCloverHit::TTdrCloverHit(const TFragment& frag) : TDetectorHit(frag)
 {
    SetNPileUps(frag.GetNumberOfPileups());
 }
@@ -35,7 +35,7 @@ TTdrCloverHit::~TTdrCloverHit() = default;
 
 void TTdrCloverHit::Copy(TObject& rhs) const
 {
-   TTdrDetectorHit::Copy(rhs);
+   TDetectorHit::Copy(rhs);
    static_cast<TTdrCloverHit&>(rhs).fFilter = fFilter;
    // We should copy over a 0 and let the hit recalculate, this is safest
    static_cast<TTdrCloverHit&>(rhs).fBitFlags      = 0;
@@ -61,7 +61,7 @@ bool TTdrCloverHit::InFilter(Int_t)
 void TTdrCloverHit::Clear(Option_t* opt)
 {
    // Clears the information stored in the TTdrCloverHit.
-   TTdrDetectorHit::Clear(opt); // clears the base (address, position and waveform)
+   TDetectorHit::Clear(opt); // clears the base (address, position and waveform)
    fFilter              = 0;
    fBitFlags      = 0;
    fCrystal             = 0xFFFF;
