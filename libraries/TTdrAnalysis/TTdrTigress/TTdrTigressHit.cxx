@@ -10,7 +10,7 @@ ClassImp(TTdrTigressHit)
 /// \endcond
 
 TTdrTigressHit::TTdrTigressHit()
-   : TTdrDetectorHit()
+   : TDetectorHit()
 {
 // Default Ctor. Ignores TObject Streamer in ROOT < 6.
 #if MAJOR_ROOT_VERSION < 6
@@ -19,14 +19,14 @@ TTdrTigressHit::TTdrTigressHit()
    Clear();
 }
 
-TTdrTigressHit::TTdrTigressHit(const TTdrTigressHit& rhs) : TTdrDetectorHit()
+TTdrTigressHit::TTdrTigressHit(const TTdrTigressHit& rhs) : TDetectorHit()
 {
    // Copy Ctor. Ignores TObject Streamer in ROOT < 6.
    Clear();
    rhs.Copy(*this);
 }
 
-TTdrTigressHit::TTdrTigressHit(const TFragment& frag) : TTdrDetectorHit(frag)
+TTdrTigressHit::TTdrTigressHit(const TFragment& frag) : TDetectorHit(frag)
 {
    SetNPileUps(frag.GetNumberOfPileups());
 }
@@ -35,7 +35,7 @@ TTdrTigressHit::~TTdrTigressHit() = default;
 
 void TTdrTigressHit::Copy(TObject& rhs) const
 {
-   TTdrDetectorHit::Copy(rhs);
+   TDetectorHit::Copy(rhs);
    static_cast<TTdrTigressHit&>(rhs).fFilter = fFilter;
    // We should copy over a 0 and let the hit recalculate, this is safest
    static_cast<TTdrTigressHit&>(rhs).fTdrTigressHitBits      = 0;
@@ -61,7 +61,7 @@ bool TTdrTigressHit::InFilter(Int_t)
 void TTdrTigressHit::Clear(Option_t* opt)
 {
    // Clears the information stored in the TTdrTigressHit.
-   TTdrDetectorHit::Clear(opt); // clears the base (address, position and waveform)
+   TDetectorHit::Clear(opt); // clears the base (address, position and waveform)
    fFilter              = 0;
    fTdrTigressHitBits      = 0;
    fCrystal             = 0xFFFF;

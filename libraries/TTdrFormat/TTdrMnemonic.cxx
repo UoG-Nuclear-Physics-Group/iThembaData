@@ -105,3 +105,24 @@ TClass* TTdrMnemonic::GetClassType() const
 	};
 	return fClassType;
 }
+
+double TTdrMnemonic::GetTime(Long64_t timestamp, Float_t cfd, double energy, const TChannel* channel) const
+{
+   if(channel == nullptr) {
+      Error("GetTime", "No TChannel provided");
+      return static_cast<Double_t>(timestamp + gRandom->Uniform());
+   }
+   switch(static_cast<EDigitizer>(channel->GetDigitizerType())) {
+		Double_t dTime;
+		case EDigitizer::kPixie:
+		dTime = timestamp * channel->GetTimeStampUnit() + channel->CalibrateCFD(cfd/3276.8);// CFD is reported as 15bit interpolation of 10 ns
+		return dTime - channel->GetTZero(energy);
+		case EDigitizer::kFastPixie:
+		dTime = timestamp * channel->GetTimeStampUnit() + channel->CalibrateCFD(cfd/6553.6);// CFD is reported as 16bit interpolation of 10 ns
+		return dTime - channel->GetTZero(energy);
+		default:
+		dTime = static_cast<Double_t>((timestamp * channel->GetTimeStampUnit()) + gRandom->Uniform());
+		return dTime - channel->GetTZero(energy);
+	}
+   return 0.;
+}

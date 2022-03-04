@@ -13,13 +13,13 @@
 #include "TFragment.h"
 #include "TChannel.h"
 
-#include "TTdrDetectorHit.h"
+#include "TDetectorHit.h"
 
-class TTdrSiLiHit : public TTdrDetectorHit {
+class TTdrSiLiHit : public TDetectorHit {
 public:
    TTdrSiLiHit();
    TTdrSiLiHit(const TTdrSiLiHit&);
-   TTdrSiLiHit(const TFragment& frag) : TTdrDetectorHit(frag) {}
+   TTdrSiLiHit(const TFragment& frag) : TDetectorHit(frag) {}
    ~TTdrSiLiHit() override;
 
 private:

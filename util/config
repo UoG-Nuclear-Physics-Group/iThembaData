@@ -41,7 +41,7 @@ fi
 libdir=$GRSISYS/iThembaData/lib
 incdir=$GRSISYS/iThembaData/include
 
-libs="-lTTdrClover -lTTdrDetector -lTTdrPlastic -lTTdrSiLi -lTTdrTigress"
+libs="-lTTdrClover -lTTdrPlastic -lTTdrSiLi -lTTdrTigress"
 
 if [[ $(root-config --cflags) == *"-std="* ]]
 then

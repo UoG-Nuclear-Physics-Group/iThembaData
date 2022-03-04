@@ -13,10 +13,10 @@
 #include "TFragment.h"
 #include "TChannel.h"
 
-#include "TTdrDetectorHit.h"
+#include "TDetectorHit.h"
 #include "TRunInfo.h"
 
-class TTdrCloverHit : public TTdrDetectorHit {
+class TTdrCloverHit : public TDetectorHit {
 public:
    enum class ETdrCloverHitBits {
       kTotalPU1    = 1<<0,

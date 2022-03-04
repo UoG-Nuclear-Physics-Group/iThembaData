@@ -7,7 +7,7 @@ ClassImp(TTdrSiLiHit)
 /// \endcond
 
 TTdrSiLiHit::TTdrSiLiHit()
-   : TTdrDetectorHit()
+   : TDetectorHit()
 {
 #if MAJOR_ROOT_VERSION < 6
    Class()->IgnoreTObjectStreamer(kTRUE);
@@ -15,7 +15,7 @@ TTdrSiLiHit::TTdrSiLiHit()
    Clear();
 }
 
-TTdrSiLiHit::TTdrSiLiHit(const TTdrSiLiHit& rhs) : TTdrDetectorHit()
+TTdrSiLiHit::TTdrSiLiHit(const TTdrSiLiHit& rhs) : TDetectorHit()
 {
 #if MAJOR_ROOT_VERSION < 6
    Class()->IgnoreTObjectStreamer(kTRUE);
@@ -28,7 +28,7 @@ TTdrSiLiHit::~TTdrSiLiHit() = default;
 
 void TTdrSiLiHit::Copy(TObject& rhs) const
 {
-   TTdrDetectorHit::Copy(rhs);
+   TDetectorHit::Copy(rhs);
    static_cast<TTdrSiLiHit&>(rhs).fFilter = fFilter;
 }
 
@@ -41,7 +41,7 @@ bool TTdrSiLiHit::InFilter(Int_t)
 
 void TTdrSiLiHit::Clear(Option_t* opt)
 {
-   TTdrDetectorHit::Clear(opt); // clears the base (address, position and waveform)
+   TDetectorHit::Clear(opt); // clears the base (address, position and waveform)
    fFilter = 0;
 }
 
