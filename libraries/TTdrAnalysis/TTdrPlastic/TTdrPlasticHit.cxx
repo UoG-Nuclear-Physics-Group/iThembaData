@@ -15,7 +15,7 @@ ClassImp(TTdrPlasticHit)
 TTdrPlasticHit::TTdrPlasticHit()
 {
 	// Default Constructor
-#if MAJOR_ROOT_VERSION < 6
+#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
 	Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
 	Clear();
@@ -26,7 +26,7 @@ TTdrPlasticHit::~TTdrPlasticHit() = default;
 TTdrPlasticHit::TTdrPlasticHit(const TTdrPlasticHit& rhs) : TDetectorHit()
 {
 	// Copy Constructor
-#if MAJOR_ROOT_VERSION < 6
+#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
 	Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
 	Clear();

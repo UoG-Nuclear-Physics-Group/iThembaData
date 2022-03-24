@@ -20,7 +20,7 @@ bool TTdrSiLi::fSetCoreWave = false;
 
 TTdrSiLi::TTdrSiLi() : TDetector()
 {
-#if MAJOR_ROOT_VERSION < 6
+#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
 	Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
 	Clear();
@@ -28,7 +28,7 @@ TTdrSiLi::TTdrSiLi() : TDetector()
 
 TTdrSiLi::TTdrSiLi(const TTdrSiLi& rhs) : TDetector()
 {
-#if MAJOR_ROOT_VERSION < 6
+#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
 	Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
 	rhs.Copy(*this);
