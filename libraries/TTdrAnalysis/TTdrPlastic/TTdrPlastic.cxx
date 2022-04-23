@@ -80,6 +80,13 @@ void TTdrPlastic::AddFragment(const std::shared_ptr<const TFragment>& frag, TCha
 void TTdrPlastic::Print(Option_t*) const
 {
 	// Prints out TTdrPlastic Multiplicity, currently does little.
-	printf("%lu fHits\n", fHits.size());
+	Print(std::cout);
+}
+
+void TTdrPlastic::Print(std::ostream& out) const
+{
+	std::ostringstream str;
+	str<<fHits.size()<<" fHits"<<std::endl;
+	out<<str.str();
 }
 

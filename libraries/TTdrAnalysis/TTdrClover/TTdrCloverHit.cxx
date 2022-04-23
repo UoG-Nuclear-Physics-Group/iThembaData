@@ -71,12 +71,18 @@ void TTdrCloverHit::Clear(Option_t* opt)
 void TTdrCloverHit::Print(Option_t*) const
 {
    // Prints the Detector Number, Crystal Number, Energy, Time and Angle.
-   printf("TdrClover Detector: %i\n", GetDetector());
-   printf("TdrClover Crystal:  %i\n", GetCrystal());
-   printf("TdrClover Energy:   %lf\n", GetEnergy());
-   printf("TdrClover hit time:   %lf\n", GetTime());
-   printf("TdrClover hit TV3 theta: %.2f\tphi%.2f\n", GetPosition().Theta() * 180 / (3.141597),
-          GetPosition().Phi() * 180 / (3.141597));
+	Print(std::cout);
+}
+
+void TTdrCloverHit::Print(std::ostream& out) const
+{
+	std::ostringstream str;
+   str<<"TdrClover Detector: "<<GetDetector()<<std::endl;
+   str<<"TdrClover Crystal:  "<<GetCrystal()<<std::endl;
+   str<<"TdrClover Energy:   "<<GetEnergy()<<std::endl;
+   str<<"TdrClover hit time: "<<GetTime()<<std::endl;
+   str<<"TdrClover hit TV3 theta: "<<GetPosition().Theta() * 180./3.141597<<"\tphi"<<GetPosition().Phi() * 180./3.141597<<std::endl;
+	out<<str.str();
 }
 
 TVector3 TTdrCloverHit::GetPosition(double dist) const

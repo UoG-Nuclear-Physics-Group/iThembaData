@@ -119,8 +119,15 @@ void TTdrPlasticHit::Print(Option_t*) const
 	// Detector
 	// Energy
 	// Time
-	printf("TdrPlastic Detector: %i\n", GetDetector());
-	printf("TdrPlastic hit energy: %.2f\n", GetEnergy());
-	printf("TdrPlastic hit time:   %.lf\n", GetTime());
+	Print(std::cout);
+}
+
+void TTdrPlasticHit::Print(std::ostream& out) const
+{
+	std::ostringstream str;
+	str<<"TdrPlastic Detector:   "<<GetDetector()<<std::endl;
+	str<<"TdrPlastic hit energy: "<<GetEnergy()<<std::endl;
+	str<<"TdrPlastic hit time:   "<<GetTime()<<std::endl;
+	out<<str.str();
 }
 

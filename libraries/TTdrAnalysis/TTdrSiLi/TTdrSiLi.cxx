@@ -55,7 +55,14 @@ void TTdrSiLi::Clear(Option_t* opt)
 void TTdrSiLi::Print(Option_t*) const
 {
 	// Prints out TTdrSiLi members, currently does nothing.
-	printf("%lu fHits\n", fHits.size());
+	Print(std::cout);
+}
+
+void TTdrSiLi::Print(std::ostream& out) const
+{
+	std::ostringstream str;
+	str<<fHits.size()<<" fHits"<<std::endl;
+	out<<str.str();
 }
 
 TTdrSiLi& TTdrSiLi::operator=(const TTdrSiLi& rhs)

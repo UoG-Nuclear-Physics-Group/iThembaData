@@ -47,9 +47,16 @@ void TTdrSiLiHit::Clear(Option_t* opt)
 
 void TTdrSiLiHit::Print(Option_t*) const
 {
-   printf("TdrSiLi Detector: %i\n", GetDetector());
-   printf("TdrSiLi Energy:   %lf\n", GetEnergy());
-   printf("TdrSiLi hit time:   %f\n", GetTime());
+	Print(std::cout);
+}
+
+void TTdrSiLiHit::Print(std::ostream& out) const
+{
+	std::ostringstream str;
+   str<<"TdrSiLi Detector: "<<GetDetector()<<std::endl;
+   str<<"TdrSiLi Energy:   "<<GetEnergy()<<std::endl;
+   str<<"TdrSiLi hit time: "<<GetTime()<<std::endl;
+	out<<str.str();
 }
 
 TVector3 TTdrSiLiHit::GetPosition(Double_t) const

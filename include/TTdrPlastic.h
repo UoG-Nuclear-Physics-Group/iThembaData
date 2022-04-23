@@ -52,6 +52,7 @@ private:
 public:
    void Clear(Option_t* opt = "") override;       //!<!
    void Print(Option_t* opt = "") const override; //!<!
+	void Print(std::ostream& out) const override;
 
    /// \cond CLASSIMP
    ClassDefOverride(TTdrPlastic, 2) // TdrPlastic Physics structure

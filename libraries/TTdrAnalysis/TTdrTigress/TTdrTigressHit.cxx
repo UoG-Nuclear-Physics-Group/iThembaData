@@ -71,12 +71,18 @@ void TTdrTigressHit::Clear(Option_t* opt)
 void TTdrTigressHit::Print(Option_t*) const
 {
    // Prints the Detector Number, Crystal Number, Energy, Time and Angle.
-   printf("TdrTigress Detector: %i\n", GetDetector());
-   printf("TdrTigress Crystal:  %i\n", GetCrystal());
-   printf("TdrTigress Energy:   %lf\n", GetEnergy());
-   printf("TdrTigress hit time:   %lf\n", GetTime());
-   printf("TdrTigress hit TV3 theta: %.2f\tphi%.2f\n", GetPosition().Theta() * 180 / (3.141597),
-          GetPosition().Phi() * 180 / (3.141597));
+	Print(std::cout);
+}
+
+void TTdrTigressHit::Print(std::ostream& out) const
+{
+	std::ostringstream str;
+   str<<"TdrTigress Detector: "<<GetDetector()<<std::endl;
+   str<<"TdrTigress Crystal:  "<<GetCrystal()<<std::endl;
+   str<<"TdrTigress Energy:   "<<GetEnergy()<<std::endl;
+   str<<"TdrTigress hit time: "<<GetTime()<<std::endl;
+   str<<"TdrTigress hit TV3 theta: "<<GetPosition().Theta() * 180./3.141597<<"\tphi"<<GetPosition().Phi() * 180./3.141597<<std::endl;
+	out<<str.str();
 }
 
 TVector3 TTdrTigressHit::GetPosition(double dist) const
