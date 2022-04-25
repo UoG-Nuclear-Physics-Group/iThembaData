@@ -20,7 +20,7 @@ bool TTdrSiLi::fSetCoreWave = false;
 
 TTdrSiLi::TTdrSiLi() : TDetector()
 {
-#if MAJOR_ROOT_VERSION < 6
+#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
 	Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
 	Clear();
@@ -28,7 +28,7 @@ TTdrSiLi::TTdrSiLi() : TDetector()
 
 TTdrSiLi::TTdrSiLi(const TTdrSiLi& rhs) : TDetector()
 {
-#if MAJOR_ROOT_VERSION < 6
+#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
 	Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
 	rhs.Copy(*this);
@@ -55,7 +55,14 @@ void TTdrSiLi::Clear(Option_t* opt)
 void TTdrSiLi::Print(Option_t*) const
 {
 	// Prints out TTdrSiLi members, currently does nothing.
-	printf("%lu fHits\n", fHits.size());
+	Print(std::cout);
+}
+
+void TTdrSiLi::Print(std::ostream& out) const
+{
+	std::ostringstream str;
+	str<<fHits.size()<<" fHits"<<std::endl;
+	out<<str.str();
 }
 
 TTdrSiLi& TTdrSiLi::operator=(const TTdrSiLi& rhs)

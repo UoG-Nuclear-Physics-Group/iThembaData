@@ -36,7 +36,7 @@ TVector3 TTdrPlastic::gPaddlePosition[21] = {
 TTdrPlastic::TTdrPlastic()
 {
 	// Default Constructor
-#if MAJOR_ROOT_VERSION < 6
+#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
 	Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
 	// Class()->AddRule("TTdrPlastic sceptar_hits attributes=NotOwner");
@@ -52,7 +52,7 @@ TTdrPlastic::~TTdrPlastic()
 TTdrPlastic::TTdrPlastic(const TTdrPlastic& rhs) : TDetector()
 {
 	// Copy Contructor
-#if MAJOR_ROOT_VERSION < 6
+#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
 	Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
 	rhs.Copy(*this);
@@ -80,6 +80,13 @@ void TTdrPlastic::AddFragment(const std::shared_ptr<const TFragment>& frag, TCha
 void TTdrPlastic::Print(Option_t*) const
 {
 	// Prints out TTdrPlastic Multiplicity, currently does little.
-	printf("%lu fHits\n", fHits.size());
+	Print(std::cout);
+}
+
+void TTdrPlastic::Print(std::ostream& out) const
+{
+	std::ostringstream str;
+	str<<fHits.size()<<" fHits"<<std::endl;
+	out<<str.str();
 }
 

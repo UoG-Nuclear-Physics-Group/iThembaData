@@ -11,15 +11,15 @@
 
 #include "TGRSIOptions.h"
 
-////////////////////////////////////////////////////////////
-//
-// TTdrClover
-//
-// The TTdrClover class defines the observables and algorithms used
-// when analyzing GRIFFIN data. It includes detector positions,
-// add-back methods, etc.
-//
-////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+///
+/// TTdrClover
+///
+/// The TTdrClover class defines the observables and algorithms used
+/// when analyzing GRIFFIN data. It includes detector positions,
+/// add-back methods, etc.
+///
+/////////////////////////////////////////////////////////////
 
 /// \cond CLASSIMP
 ClassImp(TTdrClover)
@@ -117,7 +117,7 @@ std::map<int, TSpline*> TTdrClover::fEnergyResiduals;
 TTdrClover::TTdrClover() : TSuppressed()
 {
 // Default ctor. Ignores TObjectStreamer in ROOT < 6
-#if MAJOR_ROOT_VERSION < 6
+#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
    Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
    Clear();
@@ -126,7 +126,7 @@ TTdrClover::TTdrClover() : TSuppressed()
 TTdrClover::TTdrClover(const TTdrClover& rhs) : TSuppressed()
 {
 // Copy ctor. Ignores TObjectStreamer in ROOT < 6
-#if MAJOR_ROOT_VERSION < 6
+#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
    Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
    rhs.Copy(*this);
@@ -168,28 +168,35 @@ void TTdrClover::Clear(Option_t* opt)
 
 void TTdrClover::Print(Option_t*) const
 {
-   std::cout<<"TdrClover Contains: "<<std::endl;
-   std::cout<<std::setw(6)<<GetMultiplicity()<<" hits"<<std::endl;
+	Print(std::cout);
+}
+
+void TTdrClover::Print(std::ostream& out) const
+{
+	std::ostringstream str;
+   str<<"TdrClover Contains: "<<std::endl;
+   str<<std::setw(6)<<GetMultiplicity()<<" hits"<<std::endl;
 
    if(IsAddbackSet()) {
-      std::cout<<std::setw(6)<<fAddbackHits.size()<<" addback hits"<<std::endl;
+      str<<std::setw(6)<<fAddbackHits.size()<<" addback hits"<<std::endl;
    } else {
-      std::cout<<std::setw(6)<<" "<<" Addback not set"<<std::endl;
+      str<<std::setw(6)<<" "<<" Addback not set"<<std::endl;
    }
 
    if(IsSuppressedSet()) {
-      std::cout<<std::setw(6)<<fSuppressedHits.size()<<" suppressed hits"<<std::endl;
+      str<<std::setw(6)<<fSuppressedHits.size()<<" suppressed hits"<<std::endl;
    } else {
-      std::cout<<std::setw(6)<<" "<<" suppressed not set"<<std::endl;
+      str<<std::setw(6)<<" "<<" suppressed not set"<<std::endl;
    }
 
    if(IsSuppressedAddbackSet()) {
-      std::cout<<std::setw(6)<<fSuppressedAddbackHits.size()<<" suppressed addback hits"<<std::endl;
+      str<<std::setw(6)<<fSuppressedAddbackHits.size()<<" suppressed addback hits"<<std::endl;
    } else {
-      std::cout<<std::setw(6)<<" "<<" suppressed Addback not set"<<std::endl;
+      str<<std::setw(6)<<" "<<" suppressed Addback not set"<<std::endl;
    }
 
-   std::cout<<std::setw(6)<<fCycleStart<<" cycle start"<<std::endl;
+   str<<std::setw(6)<<fCycleStart<<" cycle start"<<std::endl;
+	out<<str.str();
 }
 
 TTdrClover& TTdrClover::operator=(const TTdrClover& rhs)

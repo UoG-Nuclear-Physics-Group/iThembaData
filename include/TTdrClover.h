@@ -123,6 +123,7 @@ public:
    void Copy(TObject&) const override;            //!<!
    void Clear(Option_t* opt = "all") override;    //!<!
    void Print(Option_t* opt = "") const override; //!<!
+	void Print(std::ostream& out) const override;
 
    /// \cond CLASSIMP
    ClassDefOverride(TTdrClover, 1) // TdrClover Physics structure
