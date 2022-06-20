@@ -116,13 +116,13 @@ double TTdrMnemonic::GetTime(Long64_t timestamp, Float_t cfd, double energy, con
 		Double_t dTime;
 		case EDigitizer::kPixie:
 		dTime = timestamp * channel->GetTimeStampUnit() + channel->CalibrateCFD(cfd/3276.8);// CFD is reported as 15bit interpolation of 10 ns
-		return dTime - channel->GetTZero(energy);
+		return dTime - channel->GetTZero(energy) - channel->GetTimeOffset();
 		case EDigitizer::kFastPixie:
 		dTime = timestamp * channel->GetTimeStampUnit() + channel->CalibrateCFD(cfd/6553.6);// CFD is reported as 16bit interpolation of 10 ns
-		return dTime - channel->GetTZero(energy);
+		return dTime - channel->GetTZero(energy) - channel->GetTimeOffset();
 		default:
 		dTime = static_cast<Double_t>((timestamp * channel->GetTimeStampUnit()) + gRandom->Uniform());
-		return dTime - channel->GetTZero(energy);
+		return dTime - channel->GetTZero(energy) - channel->GetTimeOffset();
 	}
    return 0.;
 }
