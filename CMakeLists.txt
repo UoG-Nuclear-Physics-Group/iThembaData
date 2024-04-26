@@ -117,7 +117,7 @@ add_library(iThembaData SHARED
 	${PROJECT_SOURCE_DIR}/src/iThembaDataLibrary.cxx
 	)
 target_link_libraries(iThembaData ${ITHEMBADATA_LIBRARIES})
-add_dependencies(iThemaData iThembaDataVersion)
+add_dependencies(iThembaData iThembaDataVersion)
 
 ##----------------------------------------------------------------------------
 # custom target to generate the version header
