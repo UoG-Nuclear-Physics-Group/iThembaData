@@ -53,22 +53,22 @@ void TTdrEvent::Clear(Option_t*)
 
 void TTdrEvent::SetHeader(const char* buffer)
 {
-	/// Set the TDR header from buffer (assumes that buffer contains at least 24 bytes worth of data)
-	// Skip first 8 bytes (TTdrFile::Read already tested that these are "EBYEDATA")
-	fHeader.fSequence     = *reinterpret_cast<const uint32_t*>(buffer + 8);
-	fHeader.fStream       = *reinterpret_cast<const uint16_t*>(buffer + 12);
-	fHeader.fTape         = *reinterpret_cast<const uint16_t*>(buffer + 14);
-	fHeader.fHeaderEndian = *reinterpret_cast<const uint16_t*>(buffer + 16);
-	fHeader.fDataEndian   = *reinterpret_cast<const uint16_t*>(buffer + 18);
-	fHeader.fDataLength   = *reinterpret_cast<const uint32_t*>(buffer + 20);
-	//std::cout<<std::hex<<std::setfill('0');
-	//std::cout<<"sequence      0x"<<fHeader.fSequence<<std::endl;
-	//std::cout<<"stream        0x"<<fHeader.fStream<<std::endl;
-	//std::cout<<"tape          0x"<<fHeader.fTape<<std::endl;
-	//std::cout<<"header endian 0x"<<fHeader.fHeaderEndian<<std::endl;
-	//std::cout<<"data endian   0x"<<fHeader.fDataEndian<<std::endl;
-	//std::cout<<"data length   0x"<<fHeader.fDataLength<<" / 0x"<<GetDataSize()<<std::endl;
-	//std::cout<<std::dec<<std::setfill(' ');
+   /// Set the TDR header from buffer (assumes that buffer contains at least 24 bytes worth of data)
+   // Skip first 8 bytes (TTdrFile::Read already tested that these are "EBYEDATA")
+   fHeader.fSequence     = *reinterpret_cast<const uint32_t*>(buffer + 8);
+   fHeader.fStream       = *reinterpret_cast<const uint16_t*>(buffer + 12);
+   fHeader.fTape         = *reinterpret_cast<const uint16_t*>(buffer + 14);
+   fHeader.fHeaderEndian = *reinterpret_cast<const uint16_t*>(buffer + 16);
+   fHeader.fDataEndian   = *reinterpret_cast<const uint16_t*>(buffer + 18);
+   fHeader.fDataLength   = *reinterpret_cast<const uint32_t*>(buffer + 20);
+   //std::cout<<std::hex<<std::setfill('0');
+   //std::cout<<"sequence      0x"<<fHeader.fSequence<<std::endl;
+   //std::cout<<"stream        0x"<<fHeader.fStream<<std::endl;
+   //std::cout<<"tape          0x"<<fHeader.fTape<<std::endl;
+   //std::cout<<"header endian 0x"<<fHeader.fHeaderEndian<<std::endl;
+   //std::cout<<"data endian   0x"<<fHeader.fDataEndian<<std::endl;
+   //std::cout<<"data length   0x"<<fHeader.fDataLength<<" / 0x"<<GetDataSize()<<std::endl;
+   //std::cout<<std::dec<<std::setfill(' ');
 }
 
 void TTdrEvent::SetData(const std::vector<char>& buffer)

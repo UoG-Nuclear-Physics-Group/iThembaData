@@ -25,9 +25,9 @@
 TTdrFile::TTdrFile(const char* filename, TRawFile::EOpenType open_type) : TTdrFile()
 {
    switch(open_type) {
-	case TRawFile::EOpenType::kRead: Open(filename); break;
+   case TRawFile::EOpenType::kRead: Open(filename); break;
 
-	case TRawFile::EOpenType::kWrite: break;
+   case TRawFile::EOpenType::kWrite: break;
    }
 }
 
@@ -54,41 +54,41 @@ bool TTdrFile::Open(const char* filename)
       fInputFile.open(GetFilename(), std::ifstream::in | std::ifstream::binary);
       fInputFile.seekg(0, std::ifstream::end);
       if(fInputFile.tellg() < 0) {
-         std::cout<<R"(Failed to open ")"<<GetFilename()<<"/"<<Filename()<<R"("!)"<<std::endl;
+         std::cout << R"(Failed to open ")" << GetFilename() << "/" << Filename() << R"("!)" << std::endl;
          return false;
       }
       FileSize(fInputFile.tellg());
       fInputFile.seekg(0, std::ifstream::beg);
-		ResizeBuffer(0x10000);
+      ResizeBuffer(0x10000);
    } catch(std::exception& e) {
-      std::cout<<"Caught "<<e.what()<<std::endl;
+      std::cout << "Caught " << e.what() << std::endl;
    }
-// Do we need these?
-// signal(SIGPIPE,SIG_IGN); // crash if reading from closed pipe
-// signal(SIGXFSZ,SIG_IGN); // crash if reading from file >2GB without O_LARGEFILE
+   // Do we need these?
+   // signal(SIGPIPE,SIG_IGN); // crash if reading from closed pipe
+   // signal(SIGXFSZ,SIG_IGN); // crash if reading from file >2GB without O_LARGEFILE
 
 #ifndef O_LARGEFILE
 #define O_LARGEFILE 0
 #endif
 
-	// setup TChannel to use our mnemonics
-	TChannel::SetMnemonicClass(TTdrMnemonic::Class());
+   // setup TChannel to use our mnemonics
+   TChannel::SetMnemonicClass(TTdrMnemonic::Class());
 
    TRunInfo::SetRunInfo(GetRunNumber(), GetSubRunNumber());
-	TRunInfo::ClearVersion();
+   TRunInfo::ClearVersion();
    TRunInfo::SetVersion(ITHEMBADATA_RELEASE);
 
-   std::cout<<"Successfully opened file with "<<FileSize()<<" bytes!"<<std::endl;
+   std::cout << "Successfully opened file with " << FileSize() << " bytes!" << std::endl;
 
-	//std::cout<<std::hex<<std::setfill('0');
-	//for(size_t i = 0; i < fReadBuffer.size() && i < 256; ++i) {
-	//	std::cout<<std::setw(2)<<(static_cast<int16_t>(fReadBuffer[i])&0xff)<<" ";
-	//	if(i%16 == 15) std::cout<<std::endl;
-	//}
-	//std::cout<<std::dec<<std::setfill(' ');
+   //std::cout<<std::hex<<std::setfill('0');
+   //for(size_t i = 0; i < fReadBuffer.size() && i < 256; ++i) {
+   //	std::cout<<std::setw(2)<<(static_cast<int16_t>(fReadBuffer[i])&0xff)<<" ";
+   //	if(i%16 == 15) std::cout<<std::endl;
+   //}
+   //std::cout<<std::dec<<std::setfill(' ');
 
-	TTdrDetectorInformation* detInfo = new TTdrDetectorInformation();
-	TRunInfo::SetDetectorInformation(detInfo);
+   TTdrDetectorInformation* detInfo = new TTdrDetectorInformation();
+   TRunInfo::SetDetectorInformation(detInfo);
 
    return true;
 }
@@ -104,37 +104,37 @@ void TTdrFile::Close()
 ///
 int TTdrFile::Read(std::shared_ptr<TRawEvent> tdrEvent)
 {
-	if(!fInputFile.is_open()) {
-		return 0;
-	}
-	// try to read next 64k buffer
-	fInputFile.read(BufferData(), 0x10000);
-	if(!fInputFile.good()) {
-		std::cout<<"Failed to read next 64k buffer, currently at "<<BytesRead()<<"/"<<FileSize()<<std::endl;
+   if(!fInputFile.is_open()) {
+      return 0;
+   }
+   // try to read next 64k buffer
+   fInputFile.read(BufferData(), 0x10000);
+   if(!fInputFile.good()) {
+      std::cout << "Failed to read next 64k buffer, currently at " << BytesRead() << "/" << FileSize() << std::endl;
       fInputFile.close();
-		return 0;
-	}
-	//read 24 byte header
-	if(strncmp(BufferData(), "EBYEDATA", 8) != 0) {
-		std::cerr<<BytesRead()<<": Failed to find 'EBYEDATA' (or 0x45 42 59 45 44 41 54 41) at beginning of header (0x"<<std::hex<<std::setfill('0')<<std::setw(8)<<*reinterpret_cast<uint64_t*>(BufferData())<<std::hex<<std::setfill(' ')<<")"<<std::endl;
-		return 0;
-	}
-	try {
-		std::static_pointer_cast<TTdrEvent>(tdrEvent)->SetHeader(BufferData());
-	} catch(std::exception& e) {
-		std::cout<<e.what()<<std::endl;
-	}
-	uint32_t dataSize = std::static_pointer_cast<TTdrEvent>(tdrEvent)->GetHeader().fDataLength;
-	if(24 + dataSize < 0x10000) {
-		try {
-			std::static_pointer_cast<TTdrEvent>(tdrEvent)->SetData(std::vector<char>(ReadBuffer().begin() + 24, ReadBuffer().begin() + 24 + dataSize));
+      return 0;
+   }
+   //read 24 byte header
+   if(strncmp(BufferData(), "EBYEDATA", 8) != 0) {
+      std::cerr << BytesRead() << ": Failed to find 'EBYEDATA' (or 0x45 42 59 45 44 41 54 41) at beginning of header (0x" << std::hex << std::setfill('0') << std::setw(8) << *reinterpret_cast<uint64_t*>(BufferData()) << std::hex << std::setfill(' ') << ")" << std::endl;
+      return 0;
+   }
+   try {
+      std::static_pointer_cast<TTdrEvent>(tdrEvent)->SetHeader(BufferData());
+   } catch(std::exception& e) {
+      std::cout << e.what() << std::endl;
+   }
+   uint32_t dataSize = std::static_pointer_cast<TTdrEvent>(tdrEvent)->GetHeader().fDataLength;
+   if(24 + dataSize < 0x10000) {
+      try {
+         std::static_pointer_cast<TTdrEvent>(tdrEvent)->SetData(std::vector<char>(ReadBuffer().begin() + 24, ReadBuffer().begin() + 24 + dataSize));
       } catch(std::exception& e) {
-         std::cout<<e.what()<<std::endl;
+         std::cout << e.what() << std::endl;
       }
-		BytesRead(fInputFile.tellg());
-		if(BytesRead() == FileSize()) {
-			fInputFile.close();
-		}
+      BytesRead(fInputFile.tellg());
+      if(BytesRead() == FileSize()) {
+         fInputFile.close();
+      }
       return 0x10000;
    }
    return 0;
@@ -142,16 +142,16 @@ int TTdrFile::Read(std::shared_ptr<TRawEvent> tdrEvent)
 
 void TTdrFile::Skip(size_t nofEvents)
 {
-	if(!fInputFile.is_open()) {
-		std::cerr<<__PRETTY_FUNCTION__<<": input file is not open!"<<std::endl;
-		return;
-	}
-	// try to skip next nofEvents 64k buffer
-	fInputFile.seekg(nofEvents * 0x10000, std::ifstream::cur);
-	if(!fInputFile.good()) {
-		std::cout<<"Failed to skip next "<<nofEvents<<" 64k buffer(s), currently at "<<BytesRead()<<"/"<<FileSize()<<std::endl;
+   if(!fInputFile.is_open()) {
+      std::cerr << __PRETTY_FUNCTION__ << ": input file is not open!" << std::endl;
+      return;
+   }
+   // try to skip next nofEvents 64k buffer
+   fInputFile.seekg(nofEvents * 0x10000, std::ifstream::cur);
+   if(!fInputFile.good()) {
+      std::cout << "Failed to skip next " << nofEvents << " 64k buffer(s), currently at " << BytesRead() << "/" << FileSize() << std::endl;
       fInputFile.close();
-	}
+   }
 }
 
 int TTdrFile::GetRunNumber()
@@ -162,11 +162,11 @@ int TTdrFile::GetRunNumber()
       return 0;
    }
    std::size_t foundslash = Filename().rfind('/');
-   std::size_t found = Filename().rfind('R');
-	if(found < foundslash || found ==std::string::npos) {
-		std::cout<<"Warning, failed to find 'R' in filename '"<<Filename()<<"'!"<<std::endl;
-		return 0;
-	}
+   std::size_t found      = Filename().rfind('R');
+   if(found < foundslash || found == std::string::npos) {
+      std::cout << "Warning, failed to find 'R' in filename '" << Filename() << "'!" << std::endl;
+      return 0;
+   }
    std::size_t found2 = Filename().rfind('-');
    if((found2 < foundslash && foundslash != std::string::npos) || found2 == std::string::npos) {
       found2 = Filename().rfind('_');
@@ -177,10 +177,10 @@ int TTdrFile::GetRunNumber()
    }
    std::string temp;
    if(found2 == std::string::npos) {
-		// no subrun number found, use rest of filename
+      // no subrun number found, use rest of filename
       temp = Filename().substr(found + 1);
    } else {
-		// subrun number found, use everything between 'R' and '_'/'-'
+      // subrun number found, use everything between 'R' and '_'/'-'
       temp = Filename().substr(found + 1, found2 - (found + 1));
    }
    return atoi(temp.c_str());

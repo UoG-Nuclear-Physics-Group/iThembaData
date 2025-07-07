@@ -28,23 +28,23 @@ public:
 #ifndef __CINT__
    void AddFragment(const std::shared_ptr<const TFragment>&, TChannel*) override;
 #endif
-   static TVector3 GetPosition(int DetNbr); //!<!
+   static TVector3 GetPosition(int DetNbr);   //!<!
 
-   TTdrSiLi& operator=(const TTdrSiLi&); //!<!
+   TTdrSiLi& operator=(const TTdrSiLi&);   //!<!
 
 private:
-   static bool fSetCoreWave; //!<!  Flag for Waveforms ON/OFF
+   static bool fSetCoreWave;   //!<!  Flag for Waveforms ON/OFF
 
 public:
-   static bool SetCoreWave() { return fSetCoreWave; } //!<!
+   static bool SetCoreWave() { return fSetCoreWave; }   //!<!
 
-   void Copy(TObject&) const override;            //!<!
-   void Clear(Option_t* opt = "all") override;    //!<!
-   void Print(Option_t* opt = "") const override; //!<!
-	void Print(std::ostream& out) const override;
+   void Copy(TObject&) const override;              //!<!
+   void Clear(Option_t* opt = "all") override;      //!<!
+   void Print(Option_t* opt = "") const override;   //!<!
+   void Print(std::ostream& out) const override;
 
    /// \cond CLASSIMP
-   ClassDefOverride(TTdrSiLi, 4) // TdrSiLi Physics structure
+   ClassDefOverride(TTdrSiLi, 4)   // TdrSiLi Physics structure
    /// \endcond
 };
 /*! @} */

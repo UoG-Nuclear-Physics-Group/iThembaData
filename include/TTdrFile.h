@@ -31,34 +31,37 @@
 
 class TTdrFile : public TRawFile {
 public:
-   TTdrFile() = default; ///< default constructor
+   TTdrFile() = default;   ///< default constructor
    TTdrFile(const char* filename, TRawFile::EOpenType open_type = TRawFile::EOpenType::kRead);
-   ~TTdrFile() override; ///< destructor
+   ~TTdrFile() override;   ///< destructor
 
-   bool Open(const char* filename) override; ///< Open input file
+   bool Open(const char* filename) override;   ///< Open input file
 
-   void Close() override; ///< Close input file
+   void Close() override;   ///< Close input file
 
    using TObject::Read;
    using TObject::Write;
 #ifndef __CINT__
-   int Read(std::shared_ptr<TRawEvent> lstEvent) override; ///< Read one event from the file
+   int Read(std::shared_ptr<TRawEvent> lstEvent) override;   ///< Read one event from the file
 #endif
-	void Skip(size_t nofEvents) override; ///< Skip nofEvents from the file
+   void        Skip(size_t nofEvents) override;   ///< Skip nofEvents from the file
    std::string Status(bool long_file_description = true) override;
 
    int GetRunNumber() override;
    int GetSubRunNumber() override;
 
 #ifndef __CINT__
-   std::shared_ptr<TRawEvent> NewEvent() override { return std::make_shared<TTdrEvent>(); }
+   std::shared_ptr<TRawEvent> NewEvent() override
+   {
+      return std::make_shared<TTdrEvent>();
+   }
 #endif
 
 protected:
-	std::ifstream fInputFile;
+   std::ifstream fInputFile;
    /// \cond CLASSIMP
-   ClassDefOverride(TTdrFile, 0) // Used to open and write Midas Files
+   ClassDefOverride(TTdrFile, 0)   // Used to open and write Midas Files
    /// \endcond
 };
 /*! @} */
-#endif // TTdrFile.h
+#endif   // TTdrFile.h

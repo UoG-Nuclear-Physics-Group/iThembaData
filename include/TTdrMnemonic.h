@@ -6,7 +6,11 @@
 #include "Globals.h"
 #include "TClass.h"
 
-enum class EDigitizer :char { kDefault, kCaen, kPixie, kFastPixie, kPixieTapeMove };
+enum class EDigitizer : char { kDefault,
+                               kCaen,
+                               kPixie,
+                               kFastPixie,
+                               kPixieTapeMove };
 
 class TTdrMnemonic : public TMnemonic {
 public:
@@ -18,36 +22,36 @@ public:
    // EMnemonic or ESystem has no effect on the clashing of enumerated variable names.
    // These separations exist only to easily see the difference when looking at the code here.
    enum class ESystem {
-		kTdrClover,         //0
-		kTdrCloverBgo,
-		kTdrTigress,
-		kTdrTigressBgo,
-		kTdrSiLi,
-		kTdrPlastic,
-		kClear              //6
-	};
+      kTdrClover,   //0
+      kTdrCloverBgo,
+      kTdrTigress,
+      kTdrTigressBgo,
+      kTdrSiLi,
+      kTdrPlastic,
+      kClear   //6
+   };
 
-	ESystem   System() const { return fSystem; }
+   ESystem System() const { return fSystem; }
 
-	void Parse(std::string* name) override;
+   void Parse(std::string* name) override;
 
-	void EnumerateDigitizer(TPriorityValue<std::string>& digitizerName, TPriorityValue<EDigitizer>& digitizerType, TPriorityValue<int>& timeStampUnit) override;
+   void EnumerateDigitizer(TPriorityValue<std::string>& digitizerName, TPriorityValue<EDigitizer>& digitizerType, TPriorityValue<int>& timeStampUnit) override;
 
-	TClass* GetClassType() const override;
+   TClass* GetClassType() const override;
 
-	double GetTime(Long64_t timestamp, Float_t cfd, double energy, const TChannel* channel) const override;
+   double GetTime(Long64_t timestamp, Float_t cfd, double energy, const TChannel* channel) const override;
 
-	void Print(Option_t* opt = "") const override;
-	void Clear(Option_t* opt = "") override;
+   void Print(Option_t* opt = "") const override;
+   void Clear(Option_t* opt = "") override;
 
 private:
-	ESystem fSystem;
+   ESystem fSystem;
 
-	void EnumerateSystem();
+   void EnumerateSystem();
 
-	/// \cond CLASSIMP
-	ClassDefOverride(TTdrMnemonic, 1)
-	/// \endcond
+   /// \cond CLASSIMP
+   ClassDefOverride(TTdrMnemonic, 1)
+   /// \endcond
 };
 
 #endif

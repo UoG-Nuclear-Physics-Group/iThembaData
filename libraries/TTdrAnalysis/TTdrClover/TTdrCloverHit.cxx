@@ -9,7 +9,7 @@ TTdrCloverHit::TTdrCloverHit()
    : TDetectorHit()
 {
 // Default Ctor. Ignores TObject Streamer in ROOT < 6.
-#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
+#if ROOT_VERSION_CODE < ROOT_VERSION(6, 0, 0)
    Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
    Clear();
@@ -32,7 +32,7 @@ TTdrCloverHit::~TTdrCloverHit() = default;
 void TTdrCloverHit::Copy(TObject& rhs) const
 {
    TDetectorHit::Copy(rhs);
-   static_cast<TTdrCloverHit&>(rhs).fFilter = fFilter;
+   static_cast<TTdrCloverHit&>(rhs).fFilter              = fFilter;
    static_cast<TTdrCloverHit&>(rhs).fCrystal             = fCrystal;
    static_cast<TTdrCloverHit&>(rhs).fBremSuppressed_flag = fBremSuppressed_flag;
 }
@@ -55,7 +55,7 @@ bool TTdrCloverHit::InFilter(Int_t)
 void TTdrCloverHit::Clear(Option_t* opt)
 {
    // Clears the information stored in the TTdrCloverHit.
-   TDetectorHit::Clear(opt); // clears the base (address, position and waveform)
+   TDetectorHit::Clear(opt);   // clears the base (address, position and waveform)
    fFilter              = 0;
    fCrystal             = 0xFFFF;
    fBremSuppressed_flag = false;
@@ -64,18 +64,18 @@ void TTdrCloverHit::Clear(Option_t* opt)
 void TTdrCloverHit::Print(Option_t*) const
 {
    // Prints the Detector Number, Crystal Number, Energy, Time and Angle.
-	Print(std::cout);
+   Print(std::cout);
 }
 
 void TTdrCloverHit::Print(std::ostream& out) const
 {
-	std::ostringstream str;
-   str<<"TdrClover Detector: "<<GetDetector()<<std::endl;
-   str<<"TdrClover Crystal:  "<<GetCrystal()<<std::endl;
-   str<<"TdrClover Energy:   "<<GetEnergy()<<std::endl;
-   str<<"TdrClover hit time: "<<GetTime()<<std::endl;
-   str<<"TdrClover hit TV3 theta: "<<GetPosition().Theta() * 180./3.141597<<"\tphi"<<GetPosition().Phi() * 180./3.141597<<std::endl;
-	out<<str.str();
+   std::ostringstream str;
+   str << "TdrClover Detector: " << GetDetector() << std::endl;
+   str << "TdrClover Crystal:  " << GetCrystal() << std::endl;
+   str << "TdrClover Energy:   " << GetEnergy() << std::endl;
+   str << "TdrClover hit time: " << GetTime() << std::endl;
+   str << "TdrClover hit TV3 theta: " << GetPosition().Theta() * 180. / 3.141597 << "\tphi" << GetPosition().Phi() * 180. / 3.141597 << std::endl;
+   out << str.str();
 }
 
 TVector3 TTdrCloverHit::GetPosition(double dist) const
@@ -97,7 +97,7 @@ void TTdrCloverHit::Add(const TDetectorHit* hit)
 {
    // add another TDR clover hit to this one (for addback),
    // using the time and position information of the one with the higher energy
-	const TTdrCloverHit* cloverHit = dynamic_cast<const TTdrCloverHit*>(hit);
+   const TTdrCloverHit* cloverHit = dynamic_cast<const TTdrCloverHit*>(hit);
    if(cloverHit == nullptr) {
       throw std::runtime_error("trying to add non-clover hit to clover hit!");
    }
@@ -139,14 +139,14 @@ UShort_t TTdrCloverHit::NPileUps() const
 {
    // The pluralized test bits returns the actual value of the fBits masked. Not just a bool.
    return static_cast<UShort_t>(TestHitBit(static_cast<TDetectorHit::EBitFlag>(ETdrCloverHitBits::kTotalPU1)) +
-			                       TestHitBit(static_cast<TDetectorHit::EBitFlag>(ETdrCloverHitBits::kTotalPU2)));
+                                TestHitBit(static_cast<TDetectorHit::EBitFlag>(ETdrCloverHitBits::kTotalPU2)));
 }
 
 UShort_t TTdrCloverHit::PUHit() const
 {
    // The pluralized test bits returns the actual value of the fBits masked. Not just a bool.
    return static_cast<UShort_t>(TestHitBit(static_cast<TDetectorHit::EBitFlag>(ETdrCloverHitBits::kPUHit1)) +
-                               (TestHitBit(static_cast<TDetectorHit::EBitFlag>(ETdrCloverHitBits::kPUHit2)) >> static_cast<std::underlying_type<ETdrCloverHitBits>::type>(ETdrCloverHitBits::kPUHitOffset)));
+                                (TestHitBit(static_cast<TDetectorHit::EBitFlag>(ETdrCloverHitBits::kPUHit2)) >> static_cast<std::underlying_type<ETdrCloverHitBits>::type>(ETdrCloverHitBits::kPUHitOffset)));
 }
 
 void TTdrCloverHit::SetNPileUps(UChar_t npileups)
@@ -162,7 +162,6 @@ void TTdrCloverHit::SetPUHit(UChar_t puhit)
    }
    // The pluralized test bits returns the actual value of the fBits masked. Not just a bool.
 
-   SetTdrCloverFlag(ETdrCloverHitBits::kPUHit1, ((puhit<<static_cast<std::underlying_type<ETdrCloverHitBits>::type>(ETdrCloverHitBits::kPUHitOffset)) & static_cast<std::underlying_type<ETdrCloverHitBits>::type>(ETdrCloverHitBits::kPUHit1)) != 0);
-   SetTdrCloverFlag(ETdrCloverHitBits::kPUHit2, ((puhit<<static_cast<std::underlying_type<ETdrCloverHitBits>::type>(ETdrCloverHitBits::kPUHitOffset)) & static_cast<std::underlying_type<ETdrCloverHitBits>::type>(ETdrCloverHitBits::kPUHit2)) != 0);
+   SetTdrCloverFlag(ETdrCloverHitBits::kPUHit1, ((puhit << static_cast<std::underlying_type<ETdrCloverHitBits>::type>(ETdrCloverHitBits::kPUHitOffset)) & static_cast<std::underlying_type<ETdrCloverHitBits>::type>(ETdrCloverHitBits::kPUHit1)) != 0);
+   SetTdrCloverFlag(ETdrCloverHitBits::kPUHit2, ((puhit << static_cast<std::underlying_type<ETdrCloverHitBits>::type>(ETdrCloverHitBits::kPUHitOffset)) & static_cast<std::underlying_type<ETdrCloverHitBits>::type>(ETdrCloverHitBits::kPUHit2)) != 0);
 }
-
