@@ -5,10 +5,6 @@
 #include <cmath>
 #include <iostream>
 
-/// \cond CLASSIMP
-ClassImp(TTdrTigressHit)
-/// \endcond
-
 TTdrTigressHit::TTdrTigressHit()
    : TDetectorHit()
 {

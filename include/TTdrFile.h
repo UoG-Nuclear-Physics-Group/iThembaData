@@ -31,7 +31,7 @@
 
 class TTdrFile : public TRawFile {
 public:
-   TTdrFile(); ///< default constructor
+   TTdrFile() = default; ///< default constructor
    TTdrFile(const char* filename, TRawFile::EOpenType open_type = TRawFile::EOpenType::kRead);
    ~TTdrFile() override; ///< destructor
 

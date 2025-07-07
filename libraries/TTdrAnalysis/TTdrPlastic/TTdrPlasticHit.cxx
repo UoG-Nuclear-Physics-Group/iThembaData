@@ -8,10 +8,6 @@
 #include "TTdrPlastic.h"
 #include "TGRSIOptions.h"
 
-/// \cond CLASSIMP
-ClassImp(TTdrPlasticHit)
-/// \endcond
-
 TTdrPlasticHit::TTdrPlasticHit()
 {
 	// Default Constructor

@@ -7,10 +7,6 @@
 #include "TGRSIOptions.h"
 #include "TTdrMnemonic.h"
 
-/// \cond CLASSIMP
-ClassImp(TTdrDetectorInformation)
-/// \endcond
-
 TTdrDetectorInformation::TTdrDetectorInformation() : TDetectorInformation()
 {
    /// Default ctor for TTdrDetectorInformation.

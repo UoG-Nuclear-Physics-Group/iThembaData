@@ -21,10 +21,6 @@
 //
 ////////////////////////////////////////////////////////////
 
-/// \cond CLASSIMP
-ClassImp(TTdrTigress)
-/// \endcond
-
 bool DefaultAddback(TTdrTigressHit* one, TTdrTigressHit* two)
 {
    return ((one->GetDetector() == two->GetDetector()) &&
@@ -297,7 +293,7 @@ Int_t TTdrTigress::GetSuppressedMultiplicity(TBgo* bgo)
 {
 	// Automatically builds the suppressed hits using the fSuppressedCriterion (if the size of the fSuppressedHits vector is zero)
 	// and return the number of suppressed hits.
-	if(fHits.empty()) {
+	if(Hits().empty()) {
 		return 0;
 	}
 	// if the addback has been reset, clear the addback hits
@@ -305,7 +301,7 @@ Int_t TTdrTigress::GetSuppressedMultiplicity(TBgo* bgo)
 		fSuppressedHits.clear();
 	}
 	if(fSuppressedHits.empty()) {
-		CreateSuppressed(bgo, fHits, fSuppressedHits);
+		CreateSuppressed(bgo, Hits(), fSuppressedHits);
 		SetSuppressed(true);
 	}
 
@@ -370,7 +366,7 @@ void TTdrTigress::AddFragment(const std::shared_ptr<const TFragment>& frag, TCha
 	}
 
 	auto hit = new TTdrTigressHit(*frag);
-	fHits.push_back(hit);
+	Hits().push_back(hit);
 }
 
 TVector3 TTdrTigress::GetPosition(int DetNbr, int CryNbr, double dist)

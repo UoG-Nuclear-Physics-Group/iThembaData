@@ -12,10 +12,6 @@
 //
 ////////////////////////////////////////////////////////////
 
-/// \cond CLASSIMP
-ClassImp(TTdrSiLi)
-/// \endcond
-
 bool TTdrSiLi::fSetCoreWave = false;
 
 TTdrSiLi::TTdrSiLi() : TDetector()
@@ -61,7 +57,7 @@ void TTdrSiLi::Print(Option_t*) const
 void TTdrSiLi::Print(std::ostream& out) const
 {
 	std::ostringstream str;
-	str<<fHits.size()<<" fHits"<<std::endl;
+	str<<Hits().size()<<" Hits"<<std::endl;
 	out<<str.str();
 }
 
@@ -74,7 +70,7 @@ TTdrSiLi& TTdrSiLi::operator=(const TTdrSiLi& rhs)
 void TTdrSiLi::AddFragment(const std::shared_ptr<const TFragment>& frag, TChannel*)
 {
 	auto hit = new TTdrSiLiHit(*frag);
-	fHits.push_back(hit);
+	Hits().push_back(hit);
 }
 
 TVector3 TTdrSiLi::GetPosition(int)

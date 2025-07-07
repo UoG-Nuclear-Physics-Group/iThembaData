@@ -21,10 +21,6 @@
 //
 ////////////////////////////////////////////////////////////
 
-/// \cond CLASSIMP
-ClassImp(TTdrTigressBgo)
-/// \endcond
-
 TTdrTigressBgo::TTdrTigressBgo() : TBgo()
 {
 	/// Default ctor.

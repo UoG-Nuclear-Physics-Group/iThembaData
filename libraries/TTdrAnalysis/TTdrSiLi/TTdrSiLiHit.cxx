@@ -2,10 +2,6 @@
 #include "TTdrSiLiHit.h"
 #include "Globals.h"
 
-/// \cond CLASSIMP
-ClassImp(TTdrSiLiHit)
-/// \endcond
-
 TTdrSiLiHit::TTdrSiLiHit()
    : TDetectorHit()
 {

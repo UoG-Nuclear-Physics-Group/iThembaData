@@ -21,10 +21,6 @@
 //
 ////////////////////////////////////////////////////////////
 
-/// \cond CLASSIMP
-ClassImp(TTdrCloverBgo)
-/// \endcond
-
 TTdrCloverBgo::TTdrCloverBgo() : TBgo()
 {
 	/// Default ctor.

@@ -5,10 +5,6 @@
 #include <cmath>
 #include <iostream>
 
-/// \cond CLASSIMP
-ClassImp(TTdrCloverHit)
-/// \endcond
-
 TTdrCloverHit::TTdrCloverHit()
    : TDetectorHit()
 {
@@ -37,8 +33,6 @@ void TTdrCloverHit::Copy(TObject& rhs) const
 {
    TDetectorHit::Copy(rhs);
    static_cast<TTdrCloverHit&>(rhs).fFilter = fFilter;
-   // We should copy over a 0 and let the hit recalculate, this is safest
-   static_cast<TTdrCloverHit&>(rhs).fBitFlags      = 0;
    static_cast<TTdrCloverHit&>(rhs).fCrystal             = fCrystal;
    static_cast<TTdrCloverHit&>(rhs).fBremSuppressed_flag = fBremSuppressed_flag;
 }
@@ -63,7 +57,6 @@ void TTdrCloverHit::Clear(Option_t* opt)
    // Clears the information stored in the TTdrCloverHit.
    TDetectorHit::Clear(opt); // clears the base (address, position and waveform)
    fFilter              = 0;
-   fBitFlags      = 0;
    fCrystal             = 0xFFFF;
    fBremSuppressed_flag = false;
 }
@@ -139,20 +132,21 @@ void TTdrCloverHit::Add(const TDetectorHit* hit)
 
 void TTdrCloverHit::SetTdrCloverFlag(enum ETdrCloverHitBits flag, Bool_t set)
 {
-   fBitFlags.SetBit(flag, set);
+   SetHitBit(static_cast<TDetectorHit::EBitFlag>(flag), set);
 }
 
 UShort_t TTdrCloverHit::NPileUps() const
 {
    // The pluralized test bits returns the actual value of the fBits masked. Not just a bool.
-   return static_cast<UShort_t>(fBitFlags.TestBits(ETdrCloverHitBits::kTotalPU1) + fBitFlags.TestBits(ETdrCloverHitBits::kTotalPU2));
+   return static_cast<UShort_t>(TestHitBit(static_cast<TDetectorHit::EBitFlag>(ETdrCloverHitBits::kTotalPU1)) +
+			                       TestHitBit(static_cast<TDetectorHit::EBitFlag>(ETdrCloverHitBits::kTotalPU2)));
 }
 
 UShort_t TTdrCloverHit::PUHit() const
 {
    // The pluralized test bits returns the actual value of the fBits masked. Not just a bool.
-   return static_cast<UShort_t>(fBitFlags.TestBits(ETdrCloverHitBits::kPUHit1) +
-                               (fBitFlags.TestBits(ETdrCloverHitBits::kPUHit2) >> static_cast<std::underlying_type<ETdrCloverHitBits>::type>(ETdrCloverHitBits::kPUHitOffset)));
+   return static_cast<UShort_t>(TestHitBit(static_cast<TDetectorHit::EBitFlag>(ETdrCloverHitBits::kPUHit1)) +
+                               (TestHitBit(static_cast<TDetectorHit::EBitFlag>(ETdrCloverHitBits::kPUHit2)) >> static_cast<std::underlying_type<ETdrCloverHitBits>::type>(ETdrCloverHitBits::kPUHitOffset)));
 }
 
 void TTdrCloverHit::SetNPileUps(UChar_t npileups)

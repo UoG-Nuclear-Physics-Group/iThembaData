@@ -12,10 +12,6 @@
 
 #include "TTdrEvent.h"
 
-/// \cond CLASSIMP
-ClassImp(TTdrEvent)
-/// \endcond
-
 TTdrEvent::TTdrEvent()
 {
    // Default constructor

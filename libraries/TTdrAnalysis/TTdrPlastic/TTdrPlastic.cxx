@@ -3,10 +3,6 @@
 #include <TRandom.h>
 #include <TMath.h>
 
-/// \cond CLASSIMP
-ClassImp(TTdrPlastic)
-/// \endcond
-
 bool TTdrPlastic::fSetWave = false;
 
 TVector3 TTdrPlastic::gPaddlePosition[21] = {
@@ -74,7 +70,7 @@ TTdrPlastic& TTdrPlastic::operator=(const TTdrPlastic& rhs)
 void TTdrPlastic::AddFragment(const std::shared_ptr<const TFragment>& frag, TChannel*)
 {
 	auto hit = new TTdrPlasticHit(*frag);                 // Construction of TTdrPlasticHit is handled in the constructor
-	fHits.push_back(hit);
+	Hits().push_back(hit);
 }
 
 void TTdrPlastic::Print(Option_t*) const
@@ -86,7 +82,7 @@ void TTdrPlastic::Print(Option_t*) const
 void TTdrPlastic::Print(std::ostream& out) const
 {
 	std::ostringstream str;
-	str<<fHits.size()<<" fHits"<<std::endl;
+	str<<Hits().size()<<" Hits"<<std::endl;
 	out<<str.str();
 }
 

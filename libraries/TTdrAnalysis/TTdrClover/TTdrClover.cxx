@@ -21,10 +21,6 @@
 ///
 /////////////////////////////////////////////////////////////
 
-/// \cond CLASSIMP
-ClassImp(TTdrClover)
-/// \endcond
-
 bool DefaultAddback(TTdrCloverHit* one, TTdrCloverHit* two)
 {
    return ((one->GetDetector() == two->GetDetector()) &&
@@ -297,7 +293,7 @@ Int_t TTdrClover::GetSuppressedMultiplicity(TBgo* bgo)
 {
 	/// Automatically builds the suppressed hits using the fSuppressedCriterion (if the size of the fSuppressedHits vector is zero)
 	/// and return the number of suppressed hits.
-	if(fHits.empty()) {
+	if(Hits().empty()) {
 		return 0;
 	}
 	// if the addback has been reset, clear the addback hits
@@ -305,7 +301,7 @@ Int_t TTdrClover::GetSuppressedMultiplicity(TBgo* bgo)
 		fSuppressedHits.clear();
 	}
 	if(fSuppressedHits.empty()) {
-		CreateSuppressed(bgo, fHits, fSuppressedHits);
+		CreateSuppressed(bgo, Hits(), fSuppressedHits);
 		SetSuppressed(true);
 	}
 
@@ -371,7 +367,7 @@ void TTdrClover::AddFragment(const std::shared_ptr<const TFragment>& frag, TChan
 	}
 
 	auto hit = new TTdrCloverHit(*frag);
-	fHits.push_back(hit);
+	Hits().push_back(hit);
 }
 
 TVector3 TTdrClover::GetPosition(int DetNbr, int CryNbr, double dist)

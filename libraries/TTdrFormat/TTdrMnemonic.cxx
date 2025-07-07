@@ -10,8 +10,6 @@
 #include "TTdrCloverBgo.h"
 #include "TTdrTigressBgo.h"
 
-ClassImp(TTdrMnemonic)
-
 void TTdrMnemonic::Clear(Option_t*)
 {
 	TMnemonic::Clear();
@@ -22,21 +20,21 @@ void TTdrMnemonic::EnumerateSystem()
 {
    // Enumerating the fSystemString must come after the total mnemonic has been parsed as the details of other parts of
    // the mnemonic must be known
-	if(fSystemString.compare("CL") == 0) {
+	if(SystemString() == "CL") {
 		if(SubSystem() == EMnemonic::kS) {
 			fSystem = ESystem::kTdrCloverBgo;
 		} else {
 			fSystem = ESystem::kTdrClover;
 		}
-	} else if(fSystemString.compare("TT") == 0) {
+	} else if(SystemString() == "TT") {
 		if(SubSystem() == EMnemonic::kS) {
 			fSystem = ESystem::kTdrTigressBgo;
 		} else {
 			fSystem = ESystem::kTdrTigress;
 		}
-	} else if(fSystemString.compare("SI") == 0) {
+	} else if(SystemString() == "SI") {
 		fSystem = ESystem::kTdrSiLi;
-	} else if(fSystemString.compare("PL") == 0) {
+	} else if(SystemString() == "PL") {
 		fSystem = ESystem::kTdrPlastic;
 	} else {
 		fSystem = ESystem::kClear;
@@ -77,33 +75,28 @@ void TTdrMnemonic::Parse(std::string* name)
 
 void TTdrMnemonic::Print(Option_t*) const
 {
-	printf("====== TdrMNEMONIC ======\n");
-	printf("fArrayPosition           = %i\n", fArrayPosition);
-	printf("fSegment                 = %i\n", fSegment);
-	printf("fSystemString            = %s\n", fSystemString.c_str());
-	printf("fSubSystemString         = %s\n", fSubSystemString.c_str());
-	printf("fArraySubPositionString  = %s\n", fArraySubPositionString.c_str());
-	printf("fCollectedChargeString   = %s\n", fCollectedChargeString.c_str());
-	printf("fOutputSensorString      = %s\n", fOutputSensorString.c_str());
-	printf("===============================\n");
+   std::ostringstream str;
+   std::cout << "====== TdrMNEMONIC ======" << std::endl;
+   TMnemonic::Print(str);
+   std::cout << "=========================" << std::endl;
 }
 
 TClass* TTdrMnemonic::GetClassType() const
 {
-	if(fClassType != nullptr) {
-		return fClassType;
+	if(TMnemonic::GetClassType() != nullptr) {
+		return TMnemonic::GetClassType();
 	}
 
 	switch(System()) {
-		case ESystem::kTdrCloverBgo:  fClassType = TTdrCloverBgo::Class(); break;
-		case ESystem::kTdrTigressBgo: fClassType = TTdrTigressBgo::Class(); break;
-		case ESystem::kTdrClover:     fClassType = TTdrClover::Class(); break;
-		case ESystem::kTdrTigress:    fClassType = TTdrTigress::Class(); break;
-		case ESystem::kTdrSiLi:       fClassType = TTdrSiLi::Class(); break;
-		case ESystem::kTdrPlastic:    fClassType = TTdrPlastic::Class(); break;
-		default:                      fClassType = nullptr;
+		case ESystem::kTdrCloverBgo:  SetClassType(TTdrCloverBgo::Class()); break;
+		case ESystem::kTdrTigressBgo: SetClassType(TTdrTigressBgo::Class()); break;
+		case ESystem::kTdrClover:     SetClassType(TTdrClover::Class()); break;
+		case ESystem::kTdrTigress:    SetClassType(TTdrTigress::Class()); break;
+		case ESystem::kTdrSiLi:       SetClassType(TTdrSiLi::Class()); break;
+		case ESystem::kTdrPlastic:    SetClassType(TTdrPlastic::Class()); break;
+		default:                      SetClassType(nullptr);
 	};
-	return fClassType;
+	return TMnemonic::GetClassType();
 }
 
 double TTdrMnemonic::GetTime(Long64_t timestamp, Float_t cfd, double energy, const TChannel* channel) const
