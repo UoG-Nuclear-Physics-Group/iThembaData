@@ -21,19 +21,15 @@
 //
 ////////////////////////////////////////////////////////////
 
-/// \cond CLASSIMP
-ClassImp(TTdrTigressBgo)
-/// \endcond
-
 TTdrTigressBgo::TTdrTigressBgo() : TBgo()
 {
-	/// Default ctor.
+   /// Default ctor.
    TBgo::Clear();
 }
 
 TTdrTigressBgo::TTdrTigressBgo(const TTdrTigressBgo& rhs) : TBgo()
 {
-	/// Copy ctor.
+   /// Copy ctor.
    rhs.Copy(*this);
 }
 

@@ -21,19 +21,15 @@
 //
 ////////////////////////////////////////////////////////////
 
-/// \cond CLASSIMP
-ClassImp(TTdrCloverBgo)
-/// \endcond
-
 TTdrCloverBgo::TTdrCloverBgo() : TBgo()
 {
-	/// Default ctor.
+   /// Default ctor.
    TBgo::Clear();
 }
 
 TTdrCloverBgo::TTdrCloverBgo(const TTdrCloverBgo& rhs) : TBgo()
 {
-	/// Copy ctor.
+   /// Copy ctor.
    rhs.Copy(*this);
 }
 
