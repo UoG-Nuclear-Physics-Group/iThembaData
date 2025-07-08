@@ -148,7 +148,7 @@ doxygen:
 	$(MAKE) -C $@
 
 $(GRSISYS)/bin/%: .build/util/%.o | $(LIBRARY_OUTPUT) include/iThembaDataVersion.h lib/libiThembaData.so
-	$(call run_and_test,$(CPP) $< -o $@ $(LINKFLAGS),$@,$(COM_COLOR),$(COM_STRING),$(OBJ_COLOR) )
+	$(call run_and_test,$(CPP) $< -o $@ $(LINKFLAGS) $(shell grsi-config --iThembaData-libs),$@,$(COM_COLOR),$(COM_STRING),$(OBJ_COLOR) )
 
 lib: include/iThembaDataVersion.h
 	@mkdir -p $@
