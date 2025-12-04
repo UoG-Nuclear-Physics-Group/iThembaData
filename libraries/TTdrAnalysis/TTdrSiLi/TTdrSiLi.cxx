@@ -12,74 +12,70 @@
 //
 ////////////////////////////////////////////////////////////
 
-/// \cond CLASSIMP
-ClassImp(TTdrSiLi)
-/// \endcond
-
 bool TTdrSiLi::fSetCoreWave = false;
 
 TTdrSiLi::TTdrSiLi() : TDetector()
 {
-#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
-	Class()->IgnoreTObjectStreamer(kTRUE);
+#if ROOT_VERSION_CODE < ROOT_VERSION(6, 0, 0)
+   Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
-	Clear();
+   Clear();
 }
 
 TTdrSiLi::TTdrSiLi(const TTdrSiLi& rhs) : TDetector()
 {
-#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
-	Class()->IgnoreTObjectStreamer(kTRUE);
+#if ROOT_VERSION_CODE < ROOT_VERSION(6, 0, 0)
+   Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
-	rhs.Copy(*this);
+   rhs.Copy(*this);
 }
 
 void TTdrSiLi::Copy(TObject& rhs) const
 {
-	TDetector::Copy(rhs);
+   TDetector::Copy(rhs);
 
-	static_cast<TTdrSiLi&>(rhs).fSetCoreWave = fSetCoreWave;
+   static_cast<TTdrSiLi&>(rhs).fSetCoreWave = fSetCoreWave;
 }
 
 TTdrSiLi::~TTdrSiLi()
 {
-	// Default Destructor
+   // Default Destructor
 }
 
 void TTdrSiLi::Clear(Option_t* opt)
 {
-	// Clears the mother, all of the hits
-	TDetector::Clear(opt);
+   // Clears the mother, all of the hits
+   TDetector::Clear(opt);
 }
 
 void TTdrSiLi::Print(Option_t*) const
 {
-	// Prints out TTdrSiLi members, currently does nothing.
-	Print(std::cout);
+   // Prints out TTdrSiLi members, currently does nothing.
+   Print(std::cout);
 }
 
 void TTdrSiLi::Print(std::ostream& out) const
 {
-	std::ostringstream str;
-	str<<fHits.size()<<" fHits"<<std::endl;
-	out<<str.str();
+   std::ostringstream str;
+   str << Hits().size() << " Hits" << std::endl;
+   out << str.str();
 }
 
 TTdrSiLi& TTdrSiLi::operator=(const TTdrSiLi& rhs)
 {
-	rhs.Copy(*this);
-	return *this;
+   rhs.Copy(*this);
+   return *this;
 }
 
 void TTdrSiLi::AddFragment(const std::shared_ptr<const TFragment>& frag, TChannel*)
 {
-	auto hit = new TTdrSiLiHit(*frag);
-	fHits.push_back(hit);
+   auto hit = new TTdrSiLiHit(*frag);
+   Hits().push_back(hit);
 }
 
 TVector3 TTdrSiLi::GetPosition(int)
 {
-	// Gets the position vector for a crystal specified by DetNbr
-	// Does not currently contain any positons.
-	return TVector3(0, 0, 1);
+   // Gets the position vector for a crystal specified by DetNbr
+   // Does not currently contain any positons.
+   return TVector3(0, 0, 1);
 }

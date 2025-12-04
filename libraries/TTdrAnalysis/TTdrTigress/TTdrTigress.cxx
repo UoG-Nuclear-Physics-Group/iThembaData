@@ -21,10 +21,6 @@
 //
 ////////////////////////////////////////////////////////////
 
-/// \cond CLASSIMP
-ClassImp(TTdrTigress)
-/// \endcond
-
 bool DefaultAddback(TTdrTigressHit* one, TTdrTigressHit* two)
 {
    return ((one->GetDetector() == two->GetDetector()) &&
@@ -35,15 +31,15 @@ std::function<bool(TTdrTigressHit*, TTdrTigressHit*)> TTdrTigress::fAddbackCrite
 
 bool DefaultSuppression(TTdrTigressHit* clo, TBgoHit* bgo)
 {
-	// the tigress detector is the 4th detector after the three clovers
+   // the tigress detector is the 4th detector after the three clovers
    return ((4 == bgo->GetDetector()) &&
            (std::fabs(clo->GetTime() - bgo->GetTime()) < TGRSIOptions::AnalysisOptions()->SuppressionWindow()) &&
-			  (bgo->GetEnergy() > TGRSIOptions::AnalysisOptions()->SuppressionEnergy()));
+           (bgo->GetEnergy() > TGRSIOptions::AnalysisOptions()->SuppressionEnergy()));
 }
 
 std::function<bool(TTdrTigressHit*, TBgoHit*)> TTdrTigress::fSuppressionCriterion = DefaultSuppression;
 
-bool  TTdrTigress::fSetCoreWave     = false;
+bool TTdrTigress::fSetCoreWave = false;
 
 // This seems unnecessary, and why 17?;//  they are static members, and need
 //  to be defined outside the header
@@ -118,7 +114,7 @@ std::map<int, TSpline*> TTdrTigress::fEnergyResiduals;
 TTdrTigress::TTdrTigress() : TSuppressed()
 {
 // Default ctor. Ignores TObjectStreamer in ROOT < 6
-#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
+#if ROOT_VERSION_CODE < ROOT_VERSION(6, 0, 0)
    Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
    Clear();
@@ -127,7 +123,7 @@ TTdrTigress::TTdrTigress() : TSuppressed()
 TTdrTigress::TTdrTigress(const TTdrTigress& rhs) : TSuppressed()
 {
 // Copy ctor. Ignores TObjectStreamer in ROOT < 6
-#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
+#if ROOT_VERSION_CODE < ROOT_VERSION(6, 0, 0)
    Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
    rhs.Copy(*this);
@@ -138,14 +134,14 @@ void TTdrTigress::Copy(TObject& rhs) const
    // Copy function.
    TSuppressed::Copy(rhs);
 
-   static_cast<TTdrTigress&>(rhs).fAddbackHits   = fAddbackHits;
-   static_cast<TTdrTigress&>(rhs).fAddbackFrags  = fAddbackFrags;
-   static_cast<TTdrTigress&>(rhs).fSuppressedHits   = fSuppressedHits;
-   static_cast<TTdrTigress&>(rhs).fSuppressedAddbackHits   = fSuppressedAddbackHits;
-   static_cast<TTdrTigress&>(rhs).fSuppressedAddbackFrags  = fSuppressedAddbackFrags;
-   static_cast<TTdrTigress&>(rhs).fSetCoreWave          = fSetCoreWave;
-   static_cast<TTdrTigress&>(rhs).fCycleStart           = fCycleStart;
-   static_cast<TTdrTigress&>(rhs).fTdrTigressBits          = 0;
+   static_cast<TTdrTigress&>(rhs).fAddbackHits            = fAddbackHits;
+   static_cast<TTdrTigress&>(rhs).fAddbackFrags           = fAddbackFrags;
+   static_cast<TTdrTigress&>(rhs).fSuppressedHits         = fSuppressedHits;
+   static_cast<TTdrTigress&>(rhs).fSuppressedAddbackHits  = fSuppressedAddbackHits;
+   static_cast<TTdrTigress&>(rhs).fSuppressedAddbackFrags = fSuppressedAddbackFrags;
+   static_cast<TTdrTigress&>(rhs).fSetCoreWave            = fSetCoreWave;
+   static_cast<TTdrTigress&>(rhs).fCycleStart             = fCycleStart;
+   static_cast<TTdrTigress&>(rhs).fTdrTigressBits         = 0;
 }
 
 TTdrTigress::~TTdrTigress()
@@ -168,35 +164,38 @@ void TTdrTigress::Clear(Option_t* opt)
 
 void TTdrTigress::Print(Option_t*) const
 {
-	Print(std::cout);
+   Print(std::cout);
 }
 
 void TTdrTigress::Print(std::ostream& out) const
 {
-	std::ostringstream str;
-   str<<"TdrTigress Contains: "<<std::endl;
-   str<<std::setw(6)<<GetMultiplicity()<<" hits"<<std::endl;
+   std::ostringstream str;
+   str << "TdrTigress Contains: " << std::endl;
+   str << std::setw(6) << GetMultiplicity() << " hits" << std::endl;
 
    if(IsAddbackSet()) {
-      str<<std::setw(6)<<fAddbackHits.size()<<" addback hits"<<std::endl;
+      str << std::setw(6) << fAddbackHits.size() << " addback hits" << std::endl;
    } else {
-      str<<std::setw(6)<<" "<<" Addback not set"<<std::endl;
+      str << std::setw(6) << " "
+          << " Addback not set" << std::endl;
    }
 
    if(IsSuppressedSet()) {
-      str<<std::setw(6)<<fSuppressedHits.size()<<" suppressed hits"<<std::endl;
+      str << std::setw(6) << fSuppressedHits.size() << " suppressed hits" << std::endl;
    } else {
-      str<<std::setw(6)<<" "<<" suppressed not set"<<std::endl;
+      str << std::setw(6) << " "
+          << " suppressed not set" << std::endl;
    }
 
    if(IsSuppressedAddbackSet()) {
-      str<<std::setw(6)<<fSuppressedAddbackHits.size()<<" suppressed addback hits"<<std::endl;
+      str << std::setw(6) << fSuppressedAddbackHits.size() << " suppressed addback hits" << std::endl;
    } else {
-      str<<std::setw(6)<<" "<<" suppressed Addback not set"<<std::endl;
+      str << std::setw(6) << " "
+          << " suppressed Addback not set" << std::endl;
    }
 
-   str<<std::setw(6)<<fCycleStart<<" cycle start"<<std::endl;
-	out<<str.str();
+   str << std::setw(6) << fCycleStart << " cycle start" << std::endl;
+   out << str.str();
 }
 
 TTdrTigress& TTdrTigress::operator=(const TTdrTigress& rhs)
@@ -207,262 +206,262 @@ TTdrTigress& TTdrTigress::operator=(const TTdrTigress& rhs)
 
 std::vector<TDetectorHit*>& TTdrTigress::GetAddbackVector()
 {
-	return fAddbackHits;
+   return fAddbackHits;
 }
 
 std::vector<UShort_t>& TTdrTigress::GetAddbackFragVector()
 {
-	return fAddbackFrags;
+   return fAddbackFrags;
 }
 
 bool TTdrTigress::IsAddbackSet() const
 {
-	return TestBitNumber(ETdrTigressBits::kIsAddbackSet);
+   return TestBitNumber(ETdrTigressBits::kIsAddbackSet);
 }
 
 void TTdrTigress::SetAddback(const Bool_t flag) const
 {
-	return SetBitNumber(ETdrTigressBits::kIsAddbackSet, flag);
+   return SetBitNumber(ETdrTigressBits::kIsAddbackSet, flag);
 }
 
 std::vector<TDetectorHit*>& TTdrTigress::GetSuppressedVector()
 {
-	return fSuppressedHits;
+   return fSuppressedHits;
 }
 
 bool TTdrTigress::IsSuppressedSet() const
 {
-	return TestBitNumber(ETdrTigressBits::kIsSuppressedSet);
+   return TestBitNumber(ETdrTigressBits::kIsSuppressedSet);
 }
 
 void TTdrTigress::SetSuppressed(const Bool_t flag) const
 {
-	return SetBitNumber(ETdrTigressBits::kIsSuppressedSet, flag);
+   return SetBitNumber(ETdrTigressBits::kIsSuppressedSet, flag);
 }
 
 std::vector<TDetectorHit*>& TTdrTigress::GetSuppressedAddbackVector()
 {
-	return fSuppressedAddbackHits;
+   return fSuppressedAddbackHits;
 }
 
 std::vector<UShort_t>& TTdrTigress::GetSuppressedAddbackFragVector()
 {
-	return fSuppressedAddbackFrags;
+   return fSuppressedAddbackFrags;
 }
 
 bool TTdrTigress::IsSuppressedAddbackSet() const
 {
-	return TestBitNumber(ETdrTigressBits::kIsSupprAddbSet);
+   return TestBitNumber(ETdrTigressBits::kIsSupprAddbSet);
 }
 
 void TTdrTigress::SetSuppressedAddback(const Bool_t flag) const
 {
-	return SetBitNumber(ETdrTigressBits::kIsSupprAddbSet, flag);
+   return SetBitNumber(ETdrTigressBits::kIsSupprAddbSet, flag);
 }
 
 Int_t TTdrTigress::GetAddbackMultiplicity()
 {
-	// Automatically builds the addback hits using the fAddbackCriterion (if the size of the fAddbackHits vector is zero)
-	// and return the number of addback hits.
-	auto& hit_vec  = GetHitVector();
-	auto& ab_vec   = GetAddbackVector();
-	auto& frag_vec = GetAddbackFragVector();
-	if(hit_vec.empty()) {
-		return 0;
-	}
-	// if the addback has been reset, clear the addback hits
-	if(!IsAddbackSet()) {
-		ab_vec.clear();
-		frag_vec.clear();
-	}
-	if(ab_vec.empty()) {
-		CreateAddback(hit_vec, ab_vec, frag_vec);
-		SetAddback(true);
-	}
+   // Automatically builds the addback hits using the fAddbackCriterion (if the size of the fAddbackHits vector is zero)
+   // and return the number of addback hits.
+   auto& hit_vec  = GetHitVector();
+   auto& ab_vec   = GetAddbackVector();
+   auto& frag_vec = GetAddbackFragVector();
+   if(hit_vec.empty()) {
+      return 0;
+   }
+   // if the addback has been reset, clear the addback hits
+   if(!IsAddbackSet()) {
+      ab_vec.clear();
+      frag_vec.clear();
+   }
+   if(ab_vec.empty()) {
+      CreateAddback(hit_vec, ab_vec, frag_vec);
+      SetAddback(true);
+   }
 
-	return ab_vec.size();
+   return ab_vec.size();
 }
 
 TDetectorHit* TTdrTigress::GetAddbackHit(const int& i)
 {
-	if(i < GetAddbackMultiplicity()) {
-		return GetAddbackVector().at(i);
-	}
-	std::cerr<<"Addback hits are out of range"<<std::endl;
-	throw grsi::exit_exception(1);
-	return nullptr;
+   if(i < GetAddbackMultiplicity()) {
+      return GetAddbackVector().at(i);
+   }
+   std::cerr << "Addback hits are out of range" << std::endl;
+   throw grsi::exit_exception(1);
+   return nullptr;
 }
 
 Int_t TTdrTigress::GetSuppressedMultiplicity(TBgo* bgo)
 {
-	// Automatically builds the suppressed hits using the fSuppressedCriterion (if the size of the fSuppressedHits vector is zero)
-	// and return the number of suppressed hits.
-	if(fHits.empty()) {
-		return 0;
-	}
-	// if the addback has been reset, clear the addback hits
-	if(!IsSuppressedSet()) {
-		fSuppressedHits.clear();
-	}
-	if(fSuppressedHits.empty()) {
-		CreateSuppressed(bgo, fHits, fSuppressedHits);
-		SetSuppressed(true);
-	}
+   // Automatically builds the suppressed hits using the fSuppressedCriterion (if the size of the fSuppressedHits vector is zero)
+   // and return the number of suppressed hits.
+   if(Hits().empty()) {
+      return 0;
+   }
+   // if the addback has been reset, clear the addback hits
+   if(!IsSuppressedSet()) {
+      fSuppressedHits.clear();
+   }
+   if(fSuppressedHits.empty()) {
+      CreateSuppressed(bgo, Hits(), fSuppressedHits);
+      SetSuppressed(true);
+   }
 
-	return fSuppressedHits.size();
+   return fSuppressedHits.size();
 }
 
 TDetectorHit* TTdrTigress::GetSuppressedHit(const int& i)
 {
-	try {
-		return GetSuppressedVector().at(i);
-	} catch(const std::out_of_range& oor) {
-		std::cerr<<ClassName()<<" Suppressed hits are out of range: "<<oor.what()<<std::endl;
-		if(!gInterpreter) {
-			throw grsi::exit_exception(1);
-		}
-	}
-	return nullptr;
+   try {
+      return GetSuppressedVector().at(i);
+   } catch(const std::out_of_range& oor) {
+      std::cerr << ClassName() << " Suppressed hits are out of range: " << oor.what() << std::endl;
+      if(!gInterpreter) {
+         throw grsi::exit_exception(1);
+      }
+   }
+   return nullptr;
 }
 
 Int_t TTdrTigress::GetSuppressedAddbackMultiplicity(TBgo* bgo)
 {
-	// Automatically builds the addback hits using the fAddbackCriterion (if the size of the fSuppressedAddbackHits vector is zero)
-	// and return the number of addback hits.
-	auto& hit_vec  = GetHitVector();
-	auto& ab_vec   = GetSuppressedAddbackVector();
-	auto& frag_vec = GetSuppressedAddbackFragVector();
-	if(hit_vec.empty()) {
-		return 0;
-	}
-	// if the addback has been reset, clear the addback hits
-	if(!IsSuppressedAddbackSet()) {
-		ab_vec.clear();
-		frag_vec.clear();
-	}
-	if(ab_vec.empty()) {
-		CreateSuppressedAddback(bgo, hit_vec, ab_vec, frag_vec);
-		SetSuppressedAddback(true);
-	}
+   // Automatically builds the addback hits using the fAddbackCriterion (if the size of the fSuppressedAddbackHits vector is zero)
+   // and return the number of addback hits.
+   auto& hit_vec  = GetHitVector();
+   auto& ab_vec   = GetSuppressedAddbackVector();
+   auto& frag_vec = GetSuppressedAddbackFragVector();
+   if(hit_vec.empty()) {
+      return 0;
+   }
+   // if the addback has been reset, clear the addback hits
+   if(!IsSuppressedAddbackSet()) {
+      ab_vec.clear();
+      frag_vec.clear();
+   }
+   if(ab_vec.empty()) {
+      CreateSuppressedAddback(bgo, hit_vec, ab_vec, frag_vec);
+      SetSuppressedAddback(true);
+   }
 
-	return ab_vec.size();
+   return ab_vec.size();
 }
 
 TDetectorHit* TTdrTigress::GetSuppressedAddbackHit(const int& i)
 {
-	try {
-		return GetSuppressedAddbackVector().at(i);
-	} catch(const std::out_of_range& oor) {
-		std::cerr<<ClassName()<<" Suppressed addback hits are out of range: "<<oor.what()<<std::endl;
-		if(!gInterpreter) {
-			throw grsi::exit_exception(1);
-		}
-	}
-	return nullptr;
+   try {
+      return GetSuppressedAddbackVector().at(i);
+   } catch(const std::out_of_range& oor) {
+      std::cerr << ClassName() << " Suppressed addback hits are out of range: " << oor.what() << std::endl;
+      if(!gInterpreter) {
+         throw grsi::exit_exception(1);
+      }
+   }
+   return nullptr;
 }
 
 void TTdrTigress::AddFragment(const std::shared_ptr<const TFragment>& frag, TChannel* chan)
 {
-	// Builds the TdrTigress Hits directly from the TFragment. Basically, loops through the hits for an event and sets
-	// observables.
-	if(frag == nullptr || chan == nullptr) {
-		return;
-	}
+   // Builds the TdrTigress Hits directly from the TFragment. Basically, loops through the hits for an event and sets
+   // observables.
+   if(frag == nullptr || chan == nullptr) {
+      return;
+   }
 
-	auto hit = new TTdrTigressHit(*frag);
-	fHits.push_back(hit);
+   auto hit = new TTdrTigressHit(*frag);
+   Hits().push_back(hit);
 }
 
 TVector3 TTdrTigress::GetPosition(int DetNbr, int CryNbr, double dist)
 {
-	// Gets the position vector for a crystal specified by CryNbr within Tigress DetNbr at a distance of dist mm away.
-	// This is calculated to the most likely interaction point within the crystal.
-	if(DetNbr > 16) {
-		return TVector3(0, 0, 1);
-	}
+   // Gets the position vector for a crystal specified by CryNbr within Tigress DetNbr at a distance of dist mm away.
+   // This is calculated to the most likely interaction point within the crystal.
+   if(DetNbr > 16) {
+      return TVector3(0, 0, 1);
+   }
 
-	TVector3 temp_pos(gTigressPosition[DetNbr]);
+   TVector3 temp_pos(gTigressPosition[DetNbr]);
 
-	// Interaction points may eventually be set externally. May make these members of each crystal, or pass from
-	// waveforms.
-	Double_t cp = 26.0; // Crystal Center Point  mm.
-	Double_t id = 45.0; // 45.0;  //Crystal interaction depth mm.
-	// Set Theta's of the center of each DETECTOR face
-	////Define one Detector position
-	TVector3 shift;
-	switch(CryNbr) {
-		case 0: shift.SetXYZ(-cp, cp, id); break;
-		case 1: shift.SetXYZ(cp, cp, id); break;
-		case 2: shift.SetXYZ(cp, -cp, id); break;
-		case 3: shift.SetXYZ(-cp, -cp, id); break;
-		default: shift.SetXYZ(0, 0, 1); break;
-	};
-	shift.RotateY(temp_pos.Theta());
-	shift.RotateZ(temp_pos.Phi());
+   // Interaction points may eventually be set externally. May make these members of each crystal, or pass from
+   // waveforms.
+   Double_t cp = 26.0;   // Crystal Center Point  mm.
+   Double_t id = 45.0;   // 45.0;  //Crystal interaction depth mm.
+   // Set Theta's of the center of each DETECTOR face
+   ////Define one Detector position
+   TVector3 shift;
+   switch(CryNbr) {
+   case 0: shift.SetXYZ(-cp, cp, id); break;
+   case 1: shift.SetXYZ(cp, cp, id); break;
+   case 2: shift.SetXYZ(cp, -cp, id); break;
+   case 3: shift.SetXYZ(-cp, -cp, id); break;
+   default: shift.SetXYZ(0, 0, 1); break;
+   };
+   shift.RotateY(temp_pos.Theta());
+   shift.RotateZ(temp_pos.Phi());
 
-	temp_pos.SetMag(dist);
+   temp_pos.SetMag(dist);
 
-	return (temp_pos + shift);
+   return (temp_pos + shift);
 }
 
 void TTdrTigress::ResetFlags() const
 {
-	fTdrTigressBits = 0;
+   fTdrTigressBits = 0;
 }
 
 void TTdrTigress::ResetAddback()
 {
-	SetAddback(false);
-	GetAddbackVector().clear();
-	GetAddbackFragVector().clear();
+   SetAddback(false);
+   GetAddbackVector().clear();
+   GetAddbackFragVector().clear();
 }
 
 UShort_t TTdrTigress::GetNAddbackFrags(const size_t& idx)
 {
-	// Get the number of addback "fragments" contributing to the total addback hit
-	// with index idx.
-	if(idx < GetAddbackFragVector().size()) {
-		return GetAddbackFragVector().at(idx);
-	}
-	return 0;
+   // Get the number of addback "fragments" contributing to the total addback hit
+   // with index idx.
+   if(idx < GetAddbackFragVector().size()) {
+      return GetAddbackFragVector().at(idx);
+   }
+   return 0;
 }
 
 void TTdrTigress::ResetSuppressed()
 {
-	SetSuppressed(false);
-	GetSuppressedVector().clear();
+   SetSuppressed(false);
+   GetSuppressedVector().clear();
 }
 
 void TTdrTigress::ResetSuppressedAddback()
 {
-	SetSuppressedAddback(false);
-	GetSuppressedAddbackVector().clear();
-	GetSuppressedAddbackFragVector().clear();
+   SetSuppressedAddback(false);
+   GetSuppressedAddbackVector().clear();
+   GetSuppressedAddbackFragVector().clear();
 }
 
 UShort_t TTdrTigress::GetNSuppressedAddbackFrags(const size_t& idx)
 {
-	// Get the number of addback "fragments" contributing to the total addback hit
-	// with index idx.
-	if(idx < GetSuppressedAddbackFragVector().size()) {
-		return GetSuppressedAddbackFragVector().at(idx);
-	}
-	return 0;
+   // Get the number of addback "fragments" contributing to the total addback hit
+   // with index idx.
+   if(idx < GetSuppressedAddbackFragVector().size()) {
+      return GetSuppressedAddbackFragVector().at(idx);
+   }
+   return 0;
 }
 
 void TTdrTigress::SetBitNumber(enum ETdrTigressBits bit, Bool_t set) const
 {
-	// Used to set the flags that are stored in TTdrTigress.
-	fTdrTigressBits.SetBit(bit, set);
+   // Used to set the flags that are stored in TTdrTigress.
+   fTdrTigressBits.SetBit(bit, set);
 }
 
 const char* TTdrTigress::GetColorFromNumber(Int_t number)
 {
-	switch(number) {
-		case(0): return "B";
-		case(1): return "G";
-		case(2): return "R";
-		case(3): return "W";
-	};
-	return "X";
+   switch(number) {
+   case(0): return "B";
+   case(1): return "G";
+   case(2): return "R";
+   case(3): return "W";
+   };
+   return "X";
 }

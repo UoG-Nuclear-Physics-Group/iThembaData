@@ -5,15 +5,11 @@
 #include <cmath>
 #include <iostream>
 
-/// \cond CLASSIMP
-ClassImp(TTdrTigressHit)
-/// \endcond
-
 TTdrTigressHit::TTdrTigressHit()
    : TDetectorHit()
 {
 // Default Ctor. Ignores TObject Streamer in ROOT < 6.
-#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
+#if ROOT_VERSION_CODE < ROOT_VERSION(6, 0, 0)
    Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
    Clear();
@@ -38,7 +34,7 @@ void TTdrTigressHit::Copy(TObject& rhs) const
    TDetectorHit::Copy(rhs);
    static_cast<TTdrTigressHit&>(rhs).fFilter = fFilter;
    // We should copy over a 0 and let the hit recalculate, this is safest
-   static_cast<TTdrTigressHit&>(rhs).fTdrTigressHitBits      = 0;
+   static_cast<TTdrTigressHit&>(rhs).fTdrTigressHitBits   = 0;
    static_cast<TTdrTigressHit&>(rhs).fCrystal             = fCrystal;
    static_cast<TTdrTigressHit&>(rhs).fBremSuppressed_flag = fBremSuppressed_flag;
 }
@@ -61,9 +57,9 @@ bool TTdrTigressHit::InFilter(Int_t)
 void TTdrTigressHit::Clear(Option_t* opt)
 {
    // Clears the information stored in the TTdrTigressHit.
-   TDetectorHit::Clear(opt); // clears the base (address, position and waveform)
+   TDetectorHit::Clear(opt);   // clears the base (address, position and waveform)
    fFilter              = 0;
-   fTdrTigressHitBits      = 0;
+   fTdrTigressHitBits   = 0;
    fCrystal             = 0xFFFF;
    fBremSuppressed_flag = false;
 }
@@ -71,18 +67,18 @@ void TTdrTigressHit::Clear(Option_t* opt)
 void TTdrTigressHit::Print(Option_t*) const
 {
    // Prints the Detector Number, Crystal Number, Energy, Time and Angle.
-	Print(std::cout);
+   Print(std::cout);
 }
 
 void TTdrTigressHit::Print(std::ostream& out) const
 {
-	std::ostringstream str;
-   str<<"TdrTigress Detector: "<<GetDetector()<<std::endl;
-   str<<"TdrTigress Crystal:  "<<GetCrystal()<<std::endl;
-   str<<"TdrTigress Energy:   "<<GetEnergy()<<std::endl;
-   str<<"TdrTigress hit time: "<<GetTime()<<std::endl;
-   str<<"TdrTigress hit TV3 theta: "<<GetPosition().Theta() * 180./3.141597<<"\tphi"<<GetPosition().Phi() * 180./3.141597<<std::endl;
-	out<<str.str();
+   std::ostringstream str;
+   str << "TdrTigress Detector: " << GetDetector() << std::endl;
+   str << "TdrTigress Crystal:  " << GetCrystal() << std::endl;
+   str << "TdrTigress Energy:   " << GetEnergy() << std::endl;
+   str << "TdrTigress hit time: " << GetTime() << std::endl;
+   str << "TdrTigress hit TV3 theta: " << GetPosition().Theta() * 180. / 3.141597 << "\tphi" << GetPosition().Phi() * 180. / 3.141597 << std::endl;
+   out << str.str();
 }
 
 TVector3 TTdrTigressHit::GetPosition(double dist) const
@@ -104,7 +100,7 @@ void TTdrTigressHit::Add(const TDetectorHit* hit)
 {
    // add another TDR tigress hit to this one (for addback),
    // using the time and position information of the one with the higher energy
-	const TTdrTigressHit* tigressHit = dynamic_cast<const TTdrTigressHit*>(hit);
+   const TTdrTigressHit* tigressHit = dynamic_cast<const TTdrTigressHit*>(hit);
    if(tigressHit == nullptr) {
       throw std::runtime_error("trying to add non-tdr-tigress hit to tdr-tigress hit!");
    }
@@ -152,7 +148,7 @@ UShort_t TTdrTigressHit::PUHit() const
 {
    // The pluralized test bits returns the actual value of the fBits masked. Not just a bool.
    return static_cast<UShort_t>(fTdrTigressHitBits.TestBits(ETdrTigressHitBits::kPUHit1) +
-                               (fTdrTigressHitBits.TestBits(ETdrTigressHitBits::kPUHit2) >> static_cast<std::underlying_type<ETdrTigressHitBits>::type>(ETdrTigressHitBits::kPUHitOffset)));
+                                (fTdrTigressHitBits.TestBits(ETdrTigressHitBits::kPUHit2) >> static_cast<std::underlying_type<ETdrTigressHitBits>::type>(ETdrTigressHitBits::kPUHitOffset)));
 }
 
 void TTdrTigressHit::SetNPileUps(UChar_t npileups)
@@ -168,7 +164,6 @@ void TTdrTigressHit::SetPUHit(UChar_t puhit)
    }
    // The pluralized test bits returns the actual value of the fBits masked. Not just a bool.
 
-   SetTdrTigressFlag(ETdrTigressHitBits::kPUHit1, ((puhit<<static_cast<std::underlying_type<ETdrTigressHitBits>::type>(ETdrTigressHitBits::kPUHitOffset)) & static_cast<std::underlying_type<ETdrTigressHitBits>::type>(ETdrTigressHitBits::kPUHit1)) != 0);
-   SetTdrTigressFlag(ETdrTigressHitBits::kPUHit2, ((puhit<<static_cast<std::underlying_type<ETdrTigressHitBits>::type>(ETdrTigressHitBits::kPUHitOffset)) & static_cast<std::underlying_type<ETdrTigressHitBits>::type>(ETdrTigressHitBits::kPUHit2)) != 0);
+   SetTdrTigressFlag(ETdrTigressHitBits::kPUHit1, ((puhit << static_cast<std::underlying_type<ETdrTigressHitBits>::type>(ETdrTigressHitBits::kPUHitOffset)) & static_cast<std::underlying_type<ETdrTigressHitBits>::type>(ETdrTigressHitBits::kPUHit1)) != 0);
+   SetTdrTigressFlag(ETdrTigressHitBits::kPUHit2, ((puhit << static_cast<std::underlying_type<ETdrTigressHitBits>::type>(ETdrTigressHitBits::kPUHitOffset)) & static_cast<std::underlying_type<ETdrTigressHitBits>::type>(ETdrTigressHitBits::kPUHit2)) != 0);
 }
-

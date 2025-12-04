@@ -37,28 +37,28 @@ private:
 
 public:
    /////////////////////////		/////////////////////////////////////
-   inline void SetFilterPattern(const int& x) { fFilter = x; } //!<!
+   inline void SetFilterPattern(const int& x) { fFilter = x; }   //!<!
 
    /////////////////////////		/////////////////////////////////////
-   inline Int_t GetFilterPattern() const { return fFilter; } //!<!
+   inline Int_t GetFilterPattern() const { return fFilter; }   //!<!
 
-   bool InFilter(Int_t); //!<!
+   bool InFilter(Int_t);   //!<!
 
-   TVector3 GetPosition(Double_t dist) const override; //!<!
-   TVector3 GetPosition() const override;              //!<!
+   TVector3 GetPosition(Double_t dist) const override;   //!<!
+   TVector3 GetPosition() const override;                //!<!
 
 public:
-   void Clear(Option_t* opt = "") override;       //!<!
-   void Print(Option_t* opt = "") const override; //!<!
-	void Print(std::ostream& out) const override;
-   void Copy(TObject&) const override;            //!<!
-   void Copy(TObject&, bool) const override;      //!<!
+   void Clear(Option_t* opt = "") override;         //!<!
+   void Print(Option_t* opt = "") const override;   //!<!
+   void Print(std::ostream& out) const override;
+   void Copy(TObject&) const override;         //!<!
+   void Copy(TObject&, bool) const override;   //!<!
 
 private:
    Double_t GetDefaultDistance() const { return 0.0; }
 
    /// \cond CLASSIMP
-   ClassDefOverride(TTdrPlasticHit, 3) // Stores the information for a TdrPlasticHit
+   ClassDefOverride(TTdrPlasticHit, 3)   // Stores the information for a TdrPlasticHit
    /// \endcond
 };
 /*! @} */

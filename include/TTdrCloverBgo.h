@@ -14,10 +14,10 @@ public:
    TTdrCloverBgo(const TTdrCloverBgo&);
    virtual ~TTdrCloverBgo();
 
-   TTdrCloverBgo& operator=(const TTdrCloverBgo&); //!<!
+   TTdrCloverBgo& operator=(const TTdrCloverBgo&);   //!<!
 
    /// \cond CLASSIMP
-   ClassDef(TTdrCloverBgo, 1) // TdrCloverBgo Physics structure
+   ClassDef(TTdrCloverBgo, 1)   // TdrCloverBgo Physics structure
    /// \endcond
 };
 /*! @} */

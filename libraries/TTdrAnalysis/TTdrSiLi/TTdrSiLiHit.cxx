@@ -2,14 +2,10 @@
 #include "TTdrSiLiHit.h"
 #include "Globals.h"
 
-/// \cond CLASSIMP
-ClassImp(TTdrSiLiHit)
-/// \endcond
-
 TTdrSiLiHit::TTdrSiLiHit()
    : TDetectorHit()
 {
-#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
+#if ROOT_VERSION_CODE < ROOT_VERSION(6, 0, 0)
    Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
    Clear();
@@ -17,7 +13,7 @@ TTdrSiLiHit::TTdrSiLiHit()
 
 TTdrSiLiHit::TTdrSiLiHit(const TTdrSiLiHit& rhs) : TDetectorHit()
 {
-#if ROOT_VERSION_CODE < ROOT_VERSION(6,0,0)
+#if ROOT_VERSION_CODE < ROOT_VERSION(6, 0, 0)
    Class()->IgnoreTObjectStreamer(kTRUE);
 #endif
    Clear();
@@ -41,22 +37,22 @@ bool TTdrSiLiHit::InFilter(Int_t)
 
 void TTdrSiLiHit::Clear(Option_t* opt)
 {
-   TDetectorHit::Clear(opt); // clears the base (address, position and waveform)
+   TDetectorHit::Clear(opt);   // clears the base (address, position and waveform)
    fFilter = 0;
 }
 
 void TTdrSiLiHit::Print(Option_t*) const
 {
-	Print(std::cout);
+   Print(std::cout);
 }
 
 void TTdrSiLiHit::Print(std::ostream& out) const
 {
-	std::ostringstream str;
-   str<<"TdrSiLi Detector: "<<GetDetector()<<std::endl;
-   str<<"TdrSiLi Energy:   "<<GetEnergy()<<std::endl;
-   str<<"TdrSiLi hit time: "<<GetTime()<<std::endl;
-	out<<str.str();
+   std::ostringstream str;
+   str << "TdrSiLi Detector: " << GetDetector() << std::endl;
+   str << "TdrSiLi Energy:   " << GetEnergy() << std::endl;
+   str << "TdrSiLi hit time: " << GetTime() << std::endl;
+   out << str.str();
 }
 
 TVector3 TTdrSiLiHit::GetPosition(Double_t) const

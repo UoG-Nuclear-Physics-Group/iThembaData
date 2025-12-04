@@ -14,10 +14,10 @@ public:
    TTdrTigressBgo(const TTdrTigressBgo&);
    virtual ~TTdrTigressBgo();
 
-   TTdrTigressBgo& operator=(const TTdrTigressBgo&); //!<!
+   TTdrTigressBgo& operator=(const TTdrTigressBgo&);   //!<!
 
    /// \cond CLASSIMP
-   ClassDef(TTdrTigressBgo, 1) // TdrTigressBgo Physics structure
+   ClassDef(TTdrTigressBgo, 1)   // TdrTigressBgo Physics structure
    /// \endcond
 };
 /*! @} */
