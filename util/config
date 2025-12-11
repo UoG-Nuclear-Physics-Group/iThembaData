@@ -52,9 +52,6 @@ else
 	exit
 fi
 
-libdir="${GRSISYS}/iThembaData/lib"
-incdir="${GRSISYS}/iThembaData/include"
-
 libs="TTdrClover TTdrPlastic TTdrSiLi TTdrTigress"
 
 if [[ $(root-config --cflags) == *"-std="* ]]
