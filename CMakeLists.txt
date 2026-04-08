@@ -74,7 +74,7 @@ add_library(TTdr SHARED
 	${PROJECT_SOURCE_DIR}/libraries/TTdr/TTdrFile.cxx
 	)
 root_generate_dictionary(G__TTdr TTdrEvent.h TTdrFile.h MODULE TTdr LINKDEF ${PROJECT_SOURCE_DIR}/libraries/TTdr/LinkDef.h OPTIONS ${CLING_OPTIONS})
-target_link_libraries(TTdr TTdrFormat ${ROOT_LIBRARIES})
+target_link_libraries(TTdr PUBLIC TTdrFormat ${ROOT_LIBRARIES} ${GRSI_LIBRARIES})
 add_dependencies(TTdr iThembaDataVersion)
 
 add_library(TTdrFormat SHARED
@@ -82,13 +82,13 @@ add_library(TTdrFormat SHARED
 	${PROJECT_SOURCE_DIR}/libraries/TTdrFormat/TTdrMnemonic.cxx
 	)
 root_generate_dictionary(G__TTdrFormat TTdrDetectorInformation.h TTdrMnemonic.h MODULE TTdrFormat LINKDEF ${PROJECT_SOURCE_DIR}/libraries/TTdrFormat/LinkDef.h)
-target_link_libraries(TTdrFormat TTdrTigress TTdrClover TTdrPlastic TTdrSiLi)
+target_link_libraries(TTdrFormat PUBLIC TTdrTigress TTdrClover TTdrPlastic TTdrSiLi ${GRSI_LIBRARIES})
 
 add_library(TTdrDataParser SHARED
 	${PROJECT_SOURCE_DIR}/libraries/TTdrDataParser/TTdrDataParser.cxx
 	${PROJECT_SOURCE_DIR}/libraries/TTdrDataParser/TTdrDataParserException.cxx
 	)
-target_link_libraries(TTdrDataParser TTdr)
+target_link_libraries(TTdrDataParser PUBLIC TTdr ${GRSI_LIBRARIES})
 
 add_library(TTdrTigress SHARED
 	${PROJECT_SOURCE_DIR}/libraries/TTdrAnalysis/TTdrTigress/TTdrTigress.cxx
@@ -96,7 +96,7 @@ add_library(TTdrTigress SHARED
 	${PROJECT_SOURCE_DIR}/libraries/TTdrAnalysis/TTdrTigress/TTdrTigressBgo.cxx
 	)
 root_generate_dictionary(G__TTdrTigress TTdrTigress.h TTdrTigressHit.h TTdrTigressBgo.h MODULE TTdrTigress LINKDEF ${PROJECT_SOURCE_DIR}/libraries/TTdrAnalysis/TTdrTigress/LinkDef.h)
-target_link_libraries(TTdrTigress ${GRSI_LIBRARIES})
+target_link_libraries(TTdrTigress PUBLIC ${GRSI_LIBRARIES})
 
 add_library(TTdrClover SHARED
 	${PROJECT_SOURCE_DIR}/libraries/TTdrAnalysis/TTdrClover/TTdrClover.cxx
@@ -104,18 +104,21 @@ add_library(TTdrClover SHARED
 	${PROJECT_SOURCE_DIR}/libraries/TTdrAnalysis/TTdrClover/TTdrCloverBgo.cxx
 	)
 root_generate_dictionary(G__TTdrClover TTdrClover.h TTdrCloverHit.h TTdrCloverBgo.h MODULE TTdrClover LINKDEF ${PROJECT_SOURCE_DIR}/libraries/TTdrAnalysis/TTdrClover/LinkDef.h)
+target_link_libraries(TTdrClover PUBLIC ${GRSI_LIBRARIES})
 
 add_library(TTdrPlastic SHARED
 	${PROJECT_SOURCE_DIR}/libraries/TTdrAnalysis/TTdrPlastic/TTdrPlastic.cxx
 	${PROJECT_SOURCE_DIR}/libraries/TTdrAnalysis/TTdrPlastic/TTdrPlasticHit.cxx
 	)
 root_generate_dictionary(G__TTdrPlastic TTdrPlastic.h TTdrPlasticHit.h MODULE TTdrPlastic LINKDEF ${PROJECT_SOURCE_DIR}/libraries/TTdrAnalysis/TTdrPlastic/LinkDef.h)
+target_link_libraries(TTdrPlastic PUBLIC ${GRSI_LIBRARIES})
 
 add_library(TTdrSiLi SHARED
 	${PROJECT_SOURCE_DIR}/libraries/TTdrAnalysis/TTdrSiLi/TTdrSiLi.cxx
 	${PROJECT_SOURCE_DIR}/libraries/TTdrAnalysis/TTdrSiLi/TTdrSiLiHit.cxx
 	)
 root_generate_dictionary(G__TTdrSiLi TTdrSiLi.h TTdrSiLiHit.h MODULE TTdrSiLi LINKDEF ${PROJECT_SOURCE_DIR}/libraries/TTdrAnalysis/TTdrSiLi/LinkDef.h)
+target_link_libraries(TTdrSiLi PUBLIC ${GRSI_LIBRARIES})
 
 ##----------------------------------------------------------------------------
 # add the global library with the functions to create files and parsers
@@ -124,7 +127,7 @@ set(ITHEMBADATA_LIBRARIES TTdr TTdrFormat TTdrDataParser TTdrTigress TTdrClover 
 add_library(iThembaData SHARED
 	${PROJECT_SOURCE_DIR}/src/iThembaDataLibrary.cxx
 	)
-target_link_libraries(iThembaData ${ITHEMBADATA_LIBRARIES})
+target_link_libraries(iThembaData PUBLIC ${ITHEMBADATA_LIBRARIES})
 add_dependencies(iThembaData iThembaDataVersion)
 
 ##----------------------------------------------------------------------------
